@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33927.249
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupperLotto", "SupperLotto\SupperLotto.csproj", "{BD74F8E7-8B97-48D1-B30D-5E2B43C87513}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnionLotto", "UnionLotto\UnionLotto.csproj", "{19D5F777-B571-4A8B-A40A-1FC002E1BD81}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD74F8E7-8B97-48D1-B30D-5E2B43C87513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD74F8E7-8B97-48D1-B30D-5E2B43C87513}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD74F8E7-8B97-48D1-B30D-5E2B43C87513}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD74F8E7-8B97-48D1-B30D-5E2B43C87513}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19D5F777-B571-4A8B-A40A-1FC002E1BD81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19D5F777-B571-4A8B-A40A-1FC002E1BD81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19D5F777-B571-4A8B-A40A-1FC002E1BD81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19D5F777-B571-4A8B-A40A-1FC002E1BD81}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {35DC5331-2D7E-4452-8BD4-CA35185BEFE6}
+	EndGlobalSection
+EndGlobal
