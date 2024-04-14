@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -320,38 +321,36 @@ namespace UnionLotto
             var secretCode = secretCodePlusSum + secretCodeSubtractSum + secretCodeRideSum;
 
             var all = new List<int>();
-            var _clearCodeValue = clearCode;
-            var _clearCodeLS = new List<int>();
-            for (int i = 1; i <= Math.Floor(Math.Log10(clearCode) + 1); i++)
-            {
-                _clearCodeLS.Add(_clearCodeValue % 10);
-                _clearCodeValue /= 10;
-            }
-            all.AddRange(_clearCodeLS);
-            all.Add(_clearCodeLS.Sum() % 10);
-            all.Add(_clearCodeLS.Sum() / 10 + _clearCodeLS.Sum() % 10);
+            var digitsClearCode = Math.Floor(Math.Log10(clearCode) + 1);
+            all.Add(clearCode % 10);
+            all.Add(clearCode / 10 % 10);
+            var digitsSecretCode = Math.Floor(Math.Log10(clearCode) + 1);
+            all.Add(secretCode % 10);
+            all.Add(secretCode / 10 % 10);
 
-            var _secretCodeValue = secretCode;
-            var _secretCodeLS = new List<int>();
-            for (int i = 1; i <= Math.Floor(Math.Log10(secretCode) + 1); i++)
-            {
-                _secretCodeLS.Add(_secretCodeValue % 10);
-                _secretCodeValue /= 10;
-            }
-            all.AddRange(_secretCodeLS);
-            all.Add(_secretCodeLS.Sum() % 10);
-            all.Add(_secretCodeLS.Sum() / 10 + _secretCodeLS.Sum() % 10);
+            var compositeValue = Get(clearCode);
+            all.Add(compositeValue);
 
-            //all.ToList().ForEach(n =>
-            //{
-            //    var v = n < 5 ? n + 5 : n - 5;
-            //    all.Add(v);
-            //});
+            int Get(int number)
+            {
+                var compositeValue = number / 10 + number % 10;
+                if (compositeValue >= 10)
+                {
+                    compositeValue = Get(compositeValue);
+                }
+
+                return compositeValue;
+            }
+
+            all.ToList().ForEach(n =>
+            {
+                var v = n < 5 ? n + 5 : n - 5;
+                all.Add(v);
+            });
 
             all = all.Distinct().OrderBy(x => x).ToList();
             all.Insert(0, clearCode);
             all.Insert(1, secretCode);
-
 
             if (isPrint)
             {

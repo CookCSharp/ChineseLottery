@@ -28,7 +28,7 @@ namespace UnionLotto.Tool
     {
         private static int PrintPeriodIndex = 51; //打印50期以内的详细信息
         private static bool _isViewDetail = false; //是否查看详细信息
-        private static int[] _historyPeriodsViewDetail = new int[] { 2 }; //查看详细信息
+        private static int[] _historyPeriodsViewDetail = new int[] { 10 }; //查看详细信息
         private static int[] _historyPeriods = new int[] { 10, 20, 50, 100, 1000 }; //查看统计信息
         private static LinkedList<string> Summary = new LinkedList<string>();
 

@@ -312,6 +312,102 @@ namespace UnionLotto
             return nums;
         }
 
+        /// <summary>
+        /// 012路过滤
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static IList<int[]> FilterBy012Path(IList<int[]> data, int[] values)
+        {
+            //var zer = new int[11] { 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33 };
+            //var one = new int[11] { 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31 };
+            //var two = new int[11] { 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32 };
+
+            var nums = data.Where(g =>
+            {
+                var zer = g.Count(n => n % 3 == 0);
+                var one = g.Count(n => n % 3 == 1);
+                var two = g.Count(n => n % 3 == 2);
+
+                return zer == values[0] && one == values[1] && two == values[2];
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经012路过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+
+
+        /// <summary>
+        /// 第1个红色球大小过滤。注意：需要每次修改判断条件
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static IList<int[]> FilterByFirstValue(IList<int[]> data, int value)
+        {
+            var nums = data.Where(g =>
+            {
+                return g[0] > value;
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经第1个红色球大小过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 第1个红色球奇偶过滤。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value">取值0或1，0表示偶数，1表示奇数</param>
+        /// <returns></returns>
+        public static IList<int[]> FilterByFirstOddEven(IList<int[]> data, int value)
+        {
+            var nums = data.Where(g =>
+            {
+                return (g[0] & 1) == value;
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经第1个红色球奇偶过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 第6个红色球大小过滤。注意：需要每次修改判断条件
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static IList<int[]> FilterBySixthValue(IList<int[]> data, int value)
+        {
+            var nums = data.Where(g =>
+            {
+                return g[^1] > value;
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经第6个红色球大小过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 第6个红色球奇偶过滤。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value">取值0或1，0表示偶数，1表示奇数</param>
+        /// <returns></returns>
+        public static IList<int[]> FilterBySixthOddEven(IList<int[]> data, int value)
+        {
+            var nums = data.Where(g =>
+            {
+                return (g[^1] & 1) == value;
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经第6个红色球奇偶过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+
 
 
         /// <summary>
@@ -431,8 +527,7 @@ namespace UnionLotto
             var result = SelectHelper.CalculateProbableMantissa(false);
             var nums = data.Where(g =>
             {
-                var count = result.Count(n => g.Any(m => m % 10 == n));
-                return values.Contains(count);
+                return values.Any(v => result.Count(n => g.Any(m => m % 10 == n)) == v);
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经尾数定胆法过滤后余{0}组", nums.Count()));
