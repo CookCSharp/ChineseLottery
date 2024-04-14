@@ -147,7 +147,7 @@ namespace UnionLotto
         /// </summary>
         /// <param name="isPrint"></param>
         /// <returns></returns>
-        public static IList<int> CalulateProbableMantissa(bool isPrint = true)
+        public static IList<int> CalculateProbableMantissa(bool isPrint = true)
         {
             var preRedLotto = Data.PreRedBlueLotto.Take(6).ToArray();
             var mantissaNums = new List<int>
@@ -217,8 +217,10 @@ namespace UnionLotto
                 }
             }
 
+            goldNums = goldNums.Distinct().ToList();
+
             if (isPrint)
-                PrintHelper.Print("黄金分割定胆([]个)，很准：", goldNums.Distinct());
+                PrintHelper.Print("黄金分割定胆([]个)，很准：", goldNums);
 
             return goldNums;
         }
@@ -327,6 +329,7 @@ namespace UnionLotto
             }
             all.AddRange(_clearCodeLS);
             all.Add(_clearCodeLS.Sum() % 10);
+            all.Add(_clearCodeLS.Sum() / 10 + _clearCodeLS.Sum() % 10);
 
             var _secretCodeValue = secretCode;
             var _secretCodeLS = new List<int>();
@@ -337,10 +340,18 @@ namespace UnionLotto
             }
             all.AddRange(_secretCodeLS);
             all.Add(_secretCodeLS.Sum() % 10);
+            all.Add(_secretCodeLS.Sum() / 10 + _secretCodeLS.Sum() % 10);
+
+            //all.ToList().ForEach(n =>
+            //{
+            //    var v = n < 5 ? n + 5 : n - 5;
+            //    all.Add(v);
+            //});
 
             all = all.Distinct().OrderBy(x => x).ToList();
             all.Insert(0, clearCode);
             all.Insert(1, secretCode);
+
 
             if (isPrint)
             {

@@ -24,12 +24,12 @@ namespace UnionLotto
         /// <summary>
         /// 上期开奖号码
         /// </summary>
-        public static int[] PreRedBlueLotto = new int[7] { 2, 6, 12, 29, 30, 31, 10 };
+        public static int[] PreRedBlueLotto = new int[7] { 11, 14, 18, 19, 23, 26, 2 };
 
         /// <summary>
         /// 当前开奖期数
         /// </summary>
-        public const int CurrentPeriod = 40; //仅仅打印信息所用
+        public const int CurrentPeriod = 41; //仅仅打印信息所用
 
         /// <summary>
         /// 每期开奖必有红色号码
@@ -73,6 +73,10 @@ namespace UnionLotto
             //命中个数>=4个
             //重复号码中有0-2个号码可能出现
 
+
+            //2 4 5 8 9 10 13 15 17 18 19 21 23 26 28 31 33
+            //命中个数：4  缺失个数：2
+            var data40 = new int[7] { 11, 14, 18, 19, 23, 26, 2 };
 
             //2 4 5 8 9 10 13 15 17 18 19 21 23 26 28 31 33
             //命中个数：2  缺失个数：4
