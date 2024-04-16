@@ -65,5 +65,67 @@ namespace UnionLotto
                 RecursiveLoop(combinations, currentCombination, i + 1, n, k - 1);
             }
         }
+
+        public static void GetSumOfFirstAndSixth()
+        {
+            var data = new List<int>();
+            Get(data, 0, 1);
+            data.Sort();
+
+            var ss = data.MaxBy(n => data.Count(m => n == m));
+
+            void Get(List<int> data, int n, int k)
+            {
+                if (n < Data.AllRedLotto.Length)
+                {
+                    if (k < Data.AllRedLotto.Length)
+                    {
+                        data.Add(Data.AllRedLotto[n] + Data.AllRedLotto[k]);
+                        k++;
+                    }
+                    else
+                    {
+                        n++;
+                        k = n + 1;
+                    }
+                    Get(data, n, k);
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+
+        public static void GetSubtractOfFirstAndSixth()
+        {
+            var data = new List<int>();
+            Get(data, 0, 1);
+            data.Sort();
+
+            var ss = data.MaxBy(n => data.Count(m => n == m));
+
+            void Get(List<int> data, int n, int k)
+            {
+                if (n < Data.AllRedLotto.Length)
+                {
+                    if (k < Data.AllRedLotto.Length)
+                    {
+                        data.Add(Math.Abs(Data.AllRedLotto[n] - Data.AllRedLotto[k]));
+                        k++;
+                    }
+                    else
+                    {
+                        n++;
+                        k = n + 1;
+                    }
+                    Get(data, n, k);
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
     }
 }

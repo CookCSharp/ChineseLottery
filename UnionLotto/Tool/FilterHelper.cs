@@ -102,7 +102,7 @@ namespace UnionLotto
         /// 和值区间过滤。注意：需要每次修改判断条件
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="region">区间，取值1，2，3，分别表示Sum大于79，79小于等于Sum且小于等于125，Sum大于125</param>
+        /// <param name="region">区间，取值1，2，3，分别表示Sum大于78，78小于等于Sum且小于等于125，Sum大于125</param>
         /// <remarks>
         /// 和值最小值：1+2+3+4+5+6=21；和值最大值：28+29+30+31+32+33=183；
         /// </remarks>
@@ -111,31 +111,43 @@ namespace UnionLotto
         {
             var nums = data.Where(g =>
             {
-                bool b = false;
-                switch (region)
-                {
-                    case 1:
-                        b = g.Sum() < 79;
-                        break;
-                    case 2:
-                        b = g.Sum() >= 79 && g.Sum() <= 125;
-                        break;
-                    case 3:
-                        b = g.Sum() > 125;
-                        break;
-                    case 12:
-                        b = g.Sum() <= 125;
-                        break;
-                    case 13:
-                        b = g.Sum() < 79 || g.Sum() > 125;
-                        break;
-                    case 23:
-                        b = g.Sum() >= 79 && g.Sum() <= 183;
-                        break;
-                    default:
-                        break;
-                }
-                return b;
+                var a = (g.Sum() >= 32 && g.Sum() <= 69) ||
+                        (g.Sum() >= 78 && g.Sum() <= 127);
+                //var a = (g.Sum() >= 32 && g.Sum() <= 69) ||
+                //        (g.Sum() >= 78 && g.Sum() <= 88) ||
+                //        (g.Sum() >= 93 && g.Sum() <= 96) ||
+                //        (g.Sum() >= 105 && g.Sum() <= 112) ||
+                //        (g.Sum() >= 117 && g.Sum() <= 127);
+                var b1 = (g.Sum() & 1) == 0;
+                var b2 = g.Sum() % 3 == 0;
+                var b3 = (g.Sum() & 1) == 0 && g.Sum() % 3 == 0;
+                return a;
+
+                //bool b = false;
+                //switch (region)
+                //{
+                //    case 1:
+                //        b = g.Sum() < 78;
+                //        break;
+                //    case 2:
+                //        b = g.Sum() >= 78 && g.Sum() <= 125;
+                //        break;
+                //    case 3:
+                //        b = g.Sum() > 125;
+                //        break;
+                //    case 12:
+                //        b = g.Sum() <= 125;
+                //        break;
+                //    case 13:
+                //        b = g.Sum() < 78 || g.Sum() > 125;
+                //        break;
+                //    case 23:
+                //        b = g.Sum() >= 78 && g.Sum() <= 183;
+                //        break;
+                //    default:
+                //        break;
+                //}
+                //return b;
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经和值区间过滤后余{0}组", nums.Count()));
@@ -156,8 +168,10 @@ namespace UnionLotto
             var nums = data.Where(g =>
             {
                 return (g[0] + g[^1] >= 7 && g[0] + g[^1] <= 23) ||
-                       g[0] + g[^1] == 28 || g[0] + g[^1] == 29 ||
-                       (g[0] + g[^1] >= 33 && g[0] + g[^1] <= 41);
+                                             g[0] + g[^1] == 28 ||
+                                             g[0] + g[^1] == 29 ||
+                                             g[0] + g[^1] == 40 ||
+                       (g[0] + g[^1] >= 33 && g[0] + g[^1] <= 36);
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经首尾和过滤后余{0}组", nums.Count()));
@@ -177,10 +191,25 @@ namespace UnionLotto
         {
             var nums = data.Where(g =>
             {
-                return g[^1] - g[0] == value[0] ||
-                       g[^1] - g[0] == value[1] ||
-                       g[^1] - g[0] == value[2] ||
-                       g[^1] - g[0] == value[3];
+                var b = false;
+                switch (value.Length)
+                {
+                    case 1:
+                        b = g[^1] - g[0] == value[0];
+                        break;
+                    case 2:
+                        b = g[^1] - g[0] == value[0] ||
+                            g[^1] - g[0] == value[1];
+                        break;
+                    case 3:
+                        b = g[^1] - g[0] == value[0] ||
+                            g[^1] - g[0] == value[1] ||
+                            g[^1] - g[0] == value[2];
+                        break;
+                    default:
+                        break;
+                }
+                return b;
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经跨度过滤后余{0}组", nums.Count()));
@@ -374,6 +403,23 @@ namespace UnionLotto
         }
 
         /// <summary>
+        /// 第2个红色球奇偶过滤。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value">取值0或1，0表示偶数，1表示奇数</param>
+        /// <returns></returns>
+        public static IList<int[]> FilterBySecondOddEven(IList<int[]> data, int value)
+        {
+            var nums = data.Where(g =>
+            {
+                return (g[1] & 1) == value;
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经第2个红色球奇偶过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
         /// 第6个红色球大小过滤。注意：需要每次修改判断条件
         /// </summary>
         /// <param name="data"></param>
@@ -406,7 +452,6 @@ namespace UnionLotto
             PrintHelper.PrintForecastResult(string.Format("经第6个红色球奇偶过滤后余{0}组", nums.Count()));
             return nums;
         }
-
 
 
 
@@ -568,6 +613,26 @@ namespace UnionLotto
 
             PrintHelper.PrintForecastResult(string.Format("经黄金分割定胆法过滤后余{0}组", nums.Count()));
             return nums;
+        }
+
+
+
+
+
+
+
+
+        /*
+         * 
+         * 
+         * 篮球过滤
+         * 
+         * 
+         */
+
+        public static void FilterByRedSubtract(IList<int[]> data)
+        {
+
         }
     }
 }

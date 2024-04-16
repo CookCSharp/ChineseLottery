@@ -440,10 +440,50 @@ namespace UnionLotto
             PrintHelper.Print("篮球排除法，个人感觉不准：", ExcludeNums, ConsoleColor.DarkBlue);
         }
 
-
-        public static void CalculateBlue()
+        /// <summary>
+        /// 篮球：红球两两相减法，去除大于16的号码
+        /// </summary>
+        public static void CalculateBlueWithRedSubtract()
         {
+            var preRedLotto = Data.PreRedBlueLotto.Take(6).ToArray();
 
+            var data = new List<int>();
+            Get(data, 0, 1);
+            data = data.Distinct().Where(n => n <= 16).ToList();
+            data.Sort();
+
+            void Get(List<int> data, int n, int k)
+            {
+                if (n < preRedLotto.Length)
+                {
+                    if (k < preRedLotto.Length)
+                    {
+                        data.Add(Math.Abs(preRedLotto[n] - preRedLotto[k]));
+                        k++;
+                    }
+                    else
+                    {
+                        n++;
+                        k = n + 1;
+                    }
+                    Get(data, n, k);
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            PrintHelper.Print("红球两两相减法([]个)", data, ConsoleColor.DarkBlue);
+        }
+
+        /// <summary>
+        /// 篮球：合单，合双
+        /// </summary>
+        public static void CalculateBlueWithCompositeAndSingle()
+        {
+            //合数单：1,3,5,7,9,10,12,14,16
+            //合数双：2,4,6,8,11,13,15
         }
     }
 }

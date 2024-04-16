@@ -88,11 +88,11 @@ namespace UnionLotto.Tool
         /// </summary>
         public static void Verify9And11()
         {
-            InternalVerifyZero(() => SelectHelper.Calculate9And11Lotto(9, false), "9进制计算法");
-            InternalVerifyZero(() => SelectHelper.Calculate9And11Lotto(11, false), "11进制计算法");
+            //InternalVerifyZero(() => SelectHelper.Calculate9And11Lotto(9, false), "9进制计算法");
+            //InternalVerifyZero(() => SelectHelper.Calculate9And11Lotto(11, false), "11进制计算法");
 
-            //InternalVerify(() => SelectHelper.Calculate9And11Lotto(9, false), "9进制计算法");
-            //InternalVerify(() => SelectHelper.Calculate9And11Lotto(11, false), "11进计算制法");
+            InternalVerify(() => SelectHelper.Calculate9And11Lotto(9, false), "9进制计算法");
+            InternalVerify(() => SelectHelper.Calculate9And11Lotto(11, false), "11进计算制法");
         }
 
         /// <summary>
@@ -100,9 +100,9 @@ namespace UnionLotto.Tool
         /// </summary>
         public static void VerifyEveryPeriodHave()
         {
-            InternalVerifyZero(() => Data.EveryHaveNums, "每期必有号码法");
+            //InternalVerifyZero(() => Data.EveryHaveNums, "每期必有号码法");
 
-            //InternalVerify(() => Data.EveryHaveNums, "每期必有号码法");
+            InternalVerify(() => Data.EveryHaveNums, "每期必有号码法");
         }
 
         /// <summary>

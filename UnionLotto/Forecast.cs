@@ -35,7 +35,7 @@ namespace UnionLotto
             Console.WriteLine();
 
             var standardRedLotto = Data.PreRedBlueLotto.Take(6).ToList();
-            Data.PreRedBlueLotto = new int[7] { 2, 6, 12, 29, 30, 31, 10 }; //39期开奖结果
+            Data.PreRedBlueLotto = new int[7] { 2, 9, 12, 22, 25, 33, 16 }; //41期开奖结果
 
             var nums_PlusSubtract = SelectHelper.CalculatePlusAndSubtractLotto(false);
             var count_PlusSubtract = standardRedLotto.Count(n => nums_PlusSubtract.Contains(n));
@@ -80,15 +80,6 @@ namespace UnionLotto
             //VerifyHelper.VerifyPastResults(isContainRecentLotto);
         }
 
-        private static IList<int[]> GetAllRedCombinations()
-        {
-            int N = 33, K = 6;
-            var combinationCount = CommonHelper.CalculateCombinations(N, K); //1107568
-            var combinations = CommonHelper.GenerateCombinations(N, K);
-
-            return combinations;
-        }
-
         public static void GuessCurrentPeriodLotto()
         {
             //注意除法时的小数用double定义整形，以免出现错误
@@ -100,39 +91,91 @@ namespace UnionLotto
             //    //new int[] { 1, 2, 3, 4, 5, 26 },
             //    //new int[] { 1, 2, 3, 4,26,27 },
             //    //new int[] { 1, 2, 3, 216,17,116  },
-            //    new int[] { 2, 6, 12, 29, 30, 31},
-            //    new int[] { 11, 14, 18, 19, 23, 26},
+            //    //new int[] { 2, 6, 12, 29, 30, 31},
+            //    new int[] { 2, 9, 12, 22, 32, 33},
             //};
-            //////11, 14, 18, 19, 23, 26, 2
+            //2, 9, 12, 22, 25, 33, 16
 
-            data = FilterHelper.FilterByOddEven(data, [2D / 4, 3D / 3]);
-            data = FilterHelper.FilterBySize(data, [3D / 3, 4D / 2, 5D / 1]);
-            data = FilterHelper.FilterByPrimeComposite(data, [1D / 5, 2D / 4]);
-            data = FilterHelper.FilterBySumMantissa(data, [4]);
-            data = FilterHelper.FilterBySumRegion(data, 12);
+            data = FilterHelper.FilterByOddEven(data, [4D / 2]);
+            data = FilterHelper.FilterBySize(data, [4D / 2]);
+            data = FilterHelper.FilterByPrimeComposite(data, [2D / 4, 3D / 3]);
+            data = FilterHelper.FilterBySumMantissa(data, [6, 8]);
+            data = FilterHelper.FilterBySumRegion(data, 123);
             data = FilterHelper.FilterBySumOfHeadAndTail(data, 37);
-            data = FilterHelper.FilterBySpanOfHeadAndTail(data, 19, 23, 29, 31);
-            data = FilterHelper.FilterByAdjacentNumber(data, 2); //不确定
-            data = FilterHelper.FilterByACValue(data, [6, 7, 8, 9]);
+            data = FilterHelper.FilterBySpanOfHeadAndTail(data, 24, 27, 30); //24, 27, 30
+            data = FilterHelper.FilterByAdjacentNumber(data, 2); //无连号或2个2连号
+            data = FilterHelper.FilterByACValue(data, [6, 7, 8]); //6, 7, 8
+            Console.WriteLine();
 
-            data = FilterHelper.FilterByPlusAndSubtract(data, [2, 3]);
-            data = FilterHelper.FilterBySumDivision(data, [2, 3, 4]);
-            data = FilterHelper.FilterByNoveary(data, [2, 3]);
-            data = FilterHelper.FilterByUndecimal(data, [0, 1]);
-            data = FilterHelper.FilterByEveryPeriodNum(data, [0, 1]);
-            data = FilterHelper.FilterByPrimeNum(data, [1, 2]);
-            data = FilterHelper.FilterByProbableMantissa(data, [1]);
-            data = FilterHelper.FilterByProbableMiddle(data, [0, 1]);
-            data = FilterHelper.FilterByProbableGoldedCut(data, [1, 3]);
+            data = FilterHelper.FilterByPlusAndSubtract(data, [2, 3, 4]);
+            data = FilterHelper.FilterBySumDivision(data, [1, 2, 3, 4]);
+            data = FilterHelper.FilterByNoveary(data, [0, 1, 2, 3]);
+            data = FilterHelper.FilterByUndecimal(data, [0, 1, 2, 3]);
+            data = FilterHelper.FilterByEveryPeriodNum(data, [1, 2]);
+            data = FilterHelper.FilterByPrimeNum(data, [1, 2, 4]);
+            data = FilterHelper.FilterByProbableMantissa(data, [0, 1, 2]);
+            data = FilterHelper.FilterByProbableMiddle(data, [0, 1, 2, 3]);
+            data = FilterHelper.FilterByProbableGoldedCut(data, [0, 1, 3]);
+            Console.WriteLine();
 
-            //data = data.Where(x => x[0] >= 3).ToList();
-            data = data.Where(x => x[^1] > 26).ToList();
+            data = FilterHelper.FilterByFirstOddEven(data, 1);
+            data = FilterHelper.FilterBySixthOddEven(data, 1);
+            Console.WriteLine();
 
+            //明暗点：113/95
+            //明暗点尾数：0 1 3 4 5 6 8 9
 
             data.ToList().ForEach(group =>
             {
                 PrintHelper.PrintForecastResult(group.ToD2String());
             });
+        }
+
+        private static IList<int[]> GetAllRedCombinations()
+        {
+            int N = 33, K = 6;
+            var combinationCount = CommonHelper.CalculateCombinations(N, K); //1107568
+            var combinations = CommonHelper.GenerateCombinations(N, K);
+
+            return combinations;
+        }
+
+        public static void GuessCommonPeriodLotto()
+        {
+            //注意除法时的小数用double定义整形，以免出现错误
+            var data = GetAllRedCombinations();
+            PrintHelper.PrintForecastResult(string.Format("共{0}组初始数据进行过滤", data.Count));
+
+            data = FilterHelper.FilterByOddEven(data, [2D/4, 3D/3, 4D / 2]);
+            data = FilterHelper.FilterBySize(data, [2D/4, 3D/3, 4D / 2, 5D/1]);
+            data = FilterHelper.FilterByPrimeComposite(data, [1D/5, 2D / 4, 3D / 3]);
+            data = FilterHelper.FilterBySumMantissa(data, [8, 9]);
+            data = FilterHelper.FilterBySumRegion(data, 2);
+            data = FilterHelper.FilterBySumOfHeadAndTail(data, 37);
+            data = FilterHelper.FilterBySpanOfHeadAndTail(data, 24, 27, 30); //24, 27, 30
+            data = FilterHelper.FilterByAdjacentNumber(data, 0); //无连号或2个2连号
+            data = FilterHelper.FilterByACValue(data, [6, 7, 8]); //6, 7, 8
+            Console.WriteLine();
+
+            data = FilterHelper.FilterByPlusAndSubtract(data, [2, 3, 4]);
+            data = FilterHelper.FilterBySumDivision(data, [1, 2, 3, 4]);
+            data = FilterHelper.FilterByNoveary(data, [0, 1, 2, 3]);
+            data = FilterHelper.FilterByUndecimal(data, [0, 1, 2, 3]);
+            data = FilterHelper.FilterByEveryPeriodNum(data, [1, 2]);
+            data = FilterHelper.FilterByPrimeNum(data, [1, 2, 4]);
+            data = FilterHelper.FilterByProbableMantissa(data, [0, 1, 2]);
+            data = FilterHelper.FilterByProbableMiddle(data, [0, 1, 2, 3]);
+            data = FilterHelper.FilterByProbableGoldedCut(data, [0, 1, 3]);
+            Console.WriteLine();
+
+            //data = FilterHelper.FilterByFirstOddEven(data, 1);
+            //data = FilterHelper.FilterBySixthOddEven(data, 1);
+            //Console.WriteLine();
+
+            //data.ToList().ForEach(group =>
+            //{
+            //    PrintHelper.PrintForecastResult(group.ToD2String());
+            //});
         }
     }
 }
