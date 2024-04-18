@@ -69,7 +69,7 @@ namespace UnionLotto
 
     internal class Program
     {
-        private static bool _isVerifyHistory = true; //是否进行历史数据验证，还是预测数据
+        private static bool _isVerifyHistory = false; //是否进行历史数据验证，还是预测数据
         private static bool _isContainRecentLotto = true;  //是否验证包含最近一次开奖结果，false，为了推断下一期的号码
 
         static void Main(string[] args)
@@ -94,12 +94,12 @@ namespace UnionLotto
                 //SelectHelper.CalulateProbableMantissa();
                 //SelectHelper.CalulateProbableMiddle();
                 //SelectHelper.CalulateProbableGoldedCut();
-                SelectHelper.CalulatePassword();
+                //SelectHelper.CalulatePassword();
 
                 //SelectHelper.CalculateBlueLotto();
                 //SelectHelper.CalculateBlueWithRedSubtract();
 
-                //Forecast.GuessCommonPeriodLotto();
+                Forecast.GuessCommonPeriodLotto();
                 //Forecast.GuessCurrentPeriodLotto();
             }
         }
