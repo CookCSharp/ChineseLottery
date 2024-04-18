@@ -14,6 +14,7 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,8 @@ namespace UnionLotto
 {
     public class FilterHelper
     {
+        #region 常规过滤
+
         /// <summary>
         /// 奇偶比过滤
         /// </summary>
@@ -82,7 +85,7 @@ namespace UnionLotto
         }
 
         /// <summary>
-        /// 和值尾过滤
+        /// 和值尾数过滤
         /// </summary>
         /// <param name="data"></param>
         /// <param name="mantissas"></param>
@@ -94,7 +97,28 @@ namespace UnionLotto
                 return mantissas.Any(n => g.Sum() % 10 == n);
             }).ToList();
 
-            PrintHelper.PrintForecastResult(string.Format("经和值尾过滤后余{0}组", nums.Count()));
+            PrintHelper.PrintForecastResult(string.Format("经和值尾数过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 尾数和值过滤。注意：需要每次修改判断条件
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="mantissas"></param>
+        /// <returns></returns>
+        public static IList<int[]> FilterByMantissaSum(IList<int[]> data, int[] sums)
+        {
+            var nums = data.Where(g =>
+            {
+                var mantissaSum = g.Select(n => n % 10).Sum();
+
+                return sums.All(sum => mantissaSum != sum) &&
+                       mantissaSum > 14 && //&& mantissaSum % 2 == 1
+                       (mantissaSum % 3 == 0 || mantissaSum % 3 == 1);
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经尾数和值过滤后余{0}组", nums.Count()));
             return nums;
         }
 
@@ -102,7 +126,10 @@ namespace UnionLotto
         /// 和值区间过滤。注意：需要每次修改判断条件
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="region">区间，取值1，2，3，分别表示Sum大于78，78小于等于Sum且小于等于125，Sum大于125</param>
+        /// <param name="region">
+        /// 区间，取值1，2，3，分别表示Sum大于78，78小于等于Sum且小于等于127，Sum大于127；
+        /// 取值12、13、23表示联合区间段；取值123表示具体修改
+        /// </param>
         /// <remarks>
         /// 和值最小值：1+2+3+4+5+6=21；和值最大值：28+29+30+31+32+33=183；
         /// </remarks>
@@ -111,43 +138,38 @@ namespace UnionLotto
         {
             var nums = data.Where(g =>
             {
-                var a = (g.Sum() >= 32 && g.Sum() <= 69) ||
-                        (g.Sum() >= 78 && g.Sum() <= 127);
-                //var a = (g.Sum() >= 32 && g.Sum() <= 69) ||
-                //        (g.Sum() >= 78 && g.Sum() <= 88) ||
-                //        (g.Sum() >= 93 && g.Sum() <= 96) ||
-                //        (g.Sum() >= 105 && g.Sum() <= 112) ||
-                //        (g.Sum() >= 117 && g.Sum() <= 127);
-                var b1 = (g.Sum() & 1) == 0;
-                var b2 = g.Sum() % 3 == 0;
-                var b3 = (g.Sum() & 1) == 0 && g.Sum() % 3 == 0;
-                return a;
-
-                //bool b = false;
-                //switch (region)
-                //{
-                //    case 1:
-                //        b = g.Sum() < 78;
-                //        break;
-                //    case 2:
-                //        b = g.Sum() >= 78 && g.Sum() <= 125;
-                //        break;
-                //    case 3:
-                //        b = g.Sum() > 125;
-                //        break;
-                //    case 12:
-                //        b = g.Sum() <= 125;
-                //        break;
-                //    case 13:
-                //        b = g.Sum() < 78 || g.Sum() > 125;
-                //        break;
-                //    case 23:
-                //        b = g.Sum() >= 78 && g.Sum() <= 183;
-                //        break;
-                //    default:
-                //        break;
-                //}
-                //return b;
+                bool b = false;
+                switch ( region )
+                {
+                    case 1:
+                        b = g.Sum() < 78;
+                        break;
+                    case 2:
+                        b = g.Sum() >= 78 && g.Sum() <= 127;
+                        break;
+                    case 3:
+                        b = g.Sum() > 125;
+                        break;
+                    case 12:
+                        b = g.Sum() <= 125;
+                        break;
+                    case 13:
+                        b = g.Sum() < 78 || g.Sum() > 127;
+                        break;
+                    case 23:
+                        b = g.Sum() >= 78 && g.Sum() <= 183;
+                        break;
+                    case 123:
+                        b = (g.Sum() >= 78 && g.Sum() <= 96) ||
+                            (g.Sum() >= 117 && g.Sum() <= 136);
+                        var b1 = (g.Sum() & 1) == 0;
+                        var b2 = g.Sum() % 3 == 0;
+                        var b3 = (g.Sum() & 1) == 0 && g.Sum() % 3 == 0;
+                        break;
+                    default:
+                        break;
+                }
+                return b;
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经和值区间过滤后余{0}组", nums.Count()));
@@ -158,7 +180,10 @@ namespace UnionLotto
         /// 首尾和过滤。注意：需要每次修改判断条件
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="value"></param>
+        /// <param name="value">
+        /// 取值1、2、3，分别表示大、中、小，7-24为小；25-43为中；44-61为大。
+        /// 取值0时表示具体值，取值12，13，23表示联合区间段；取值123表示具体修改
+        /// </param>
         /// <remarks> 
         /// 首尾和最小值：1+6=7；首尾和最大值：28+33=61
         /// </remarks> 
@@ -167,11 +192,39 @@ namespace UnionLotto
         {
             var nums = data.Where(g =>
             {
-                return (g[0] + g[^1] >= 7 && g[0] + g[^1] <= 23) ||
-                                             g[0] + g[^1] == 28 ||
-                                             g[0] + g[^1] == 29 ||
-                                             g[0] + g[^1] == 40 ||
-                       (g[0] + g[^1] >= 33 && g[0] + g[^1] <= 36);
+                var b = false;
+                var sum = g[0] + g[^1];
+                switch ( value )
+                {
+                    case 0:
+                        b = sum == value;
+                        break;
+                    case 1:
+                        b = sum >= 7 && sum <= 24;
+                        break;
+                    case 2:
+                        b = sum >= 25 && sum <= 43;
+                        break;
+                    case 3:
+                        b = sum >= 44 && sum <= 61;
+                        break;
+                    case 12:
+                        b = sum <= 43;
+                        break;
+                    case 13:
+                        b = (sum >= 7 && sum <= 24) || (sum >= 44 && sum <= 61);
+                        break;
+                    case 23:
+                        b = sum >= 25;
+                        break;
+                    case 123:
+                        b = (sum >= 7 && sum <= 31) || sum == 33 || sum == 36;
+                        //b = sum < 44;
+                        break;
+                    default:
+                        break;
+                }
+                return b;
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经首尾和过滤后余{0}组", nums.Count()));
@@ -182,126 +235,19 @@ namespace UnionLotto
         /// 跨度过滤，即首尾差值。注意：需要每次修改判断条件
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="value"></param>
+        /// <param name="values"></param>
         /// <remarks>
         /// 跨度最小值：6-1=5；跨度最大值：33-1=32
         /// </remarks> 
         /// <returns></returns>
-        public static IList<int[]> FilterBySpanOfHeadAndTail(IList<int[]> data, params int[] value)
+        public static IList<int[]> FilterBySpanOfHeadAndTail(IList<int[]> data, params int[] values)
         {
             var nums = data.Where(g =>
             {
-                var b = false;
-                switch (value.Length)
-                {
-                    case 1:
-                        b = g[^1] - g[0] == value[0];
-                        break;
-                    case 2:
-                        b = g[^1] - g[0] == value[0] ||
-                            g[^1] - g[0] == value[1];
-                        break;
-                    case 3:
-                        b = g[^1] - g[0] == value[0] ||
-                            g[^1] - g[0] == value[1] ||
-                            g[^1] - g[0] == value[2];
-                        break;
-                    default:
-                        break;
-                }
-                return b;
+                return values.Any(v => g[^1] - g[0] == v);
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经跨度过滤后余{0}组", nums.Count()));
-            return nums;
-        }
-
-        /// <summary>
-        /// 连号法过滤
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="value">连号数</param>
-        /// <returns></returns>
-        public static IList<int[]> FilterByAdjacentNumber(IList<int[]> data, int value)
-        {
-            if (value > 4)
-                throw new ArgumentException(nameof(value));
-
-            var result = SelectHelper.CalulateProbableGoldedCut(false);
-            var nums = new List<int[]>();
-
-            var nums0 = data.Where(g =>
-            {
-                int consecutiveCount = 0;
-                for (int i = 0; i < g.Length - 1; i++)
-                {
-                    if (g[i + 1] - g[i] == 1)
-                    {
-                        consecutiveCount++;
-                    }
-                }
-                return consecutiveCount == 0;
-            }).ToList();
-
-            var nums2 = data.Where(g =>
-            {
-                int consecutiveCount = 0;
-                for (int i = 0; i < g.Length - 1; i++)
-                {
-                    if (g[i + 1] - g[i] == 1)
-                    {
-                        consecutiveCount++;
-                    }
-                }
-                return consecutiveCount > 0;
-            }).ToList();
-
-            var nums3 = data.Where(g =>
-            {
-                int consecutiveCount = 0;
-                for (int i = 0; i < g.Length - 2; i++)
-                {
-                    if (g[i + 1] - g[i] == 1 && g[i + 2] - g[i + 1] == 1)
-                    {
-                        consecutiveCount++;
-                    }
-                }
-                return consecutiveCount > 0;
-            }).ToList();
-
-            var nums4 = data.Where(g =>
-            {
-                int consecutiveCount = 0;
-                for (int i = 0; i < g.Length - 3; i++)
-                {
-                    if (g[i + 1] - g[i] == 1 && g[i + 2] - g[i + 1] == 1 && g[i + 3] - g[i + 2] == 1)
-                    {
-                        consecutiveCount++;
-                    }
-                }
-                return consecutiveCount > 0;
-            }).ToList();
-
-            switch (value)
-            {
-                case 0:
-                    nums = nums0;
-                    break;
-                case 2:
-                    nums = nums2.Except(nums3).ToList();
-                    break;
-                case 3:
-                    nums = nums3.Except(nums4).ToList(); ;
-                    break;
-                case 4:
-                    nums = nums4;
-                    break;
-                default:
-
-                    break;
-            }
-
-            PrintHelper.PrintForecastResult(string.Format("经连号法过滤后余{0}组", nums.Count()));
             return nums;
         }
 
@@ -323,9 +269,9 @@ namespace UnionLotto
 
             void Get(List<int> ls, int[] g, int start, int k)
             {
-                if (start < g.Length)
+                if ( start < g.Length )
                 {
-                    if (k < g.Length)
+                    if ( k < g.Length )
                     {
                         ls.Add(Math.Abs(g[start] - g[k]));
                         Get(ls, g, start, k + 1);
@@ -338,6 +284,109 @@ namespace UnionLotto
             }
 
             PrintHelper.PrintForecastResult(string.Format("经AC值过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 连号法过滤
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value">连号数</param>
+        /// <returns></returns>
+        public static IList<int[]> FilterByAdjacentNumber(IList<int[]> data, int value)
+        {
+            var nums = new List<int[]>();
+
+            var nums0 = data.Where(g =>
+            {
+                int consecutiveCount = 0;
+                for ( int i = 0; i < g.Length - 1; i++ )
+                {
+                    if ( g[i + 1] - g[i] == 1 )
+                    {
+                        consecutiveCount++;
+                    }
+                }
+                return consecutiveCount == 0;
+            }).ToList();
+
+            var nums2 = data.Where(g =>
+            {
+                int consecutiveCount = 0;
+                for ( int i = 0; i < g.Length - 1; i++ )
+                {
+                    if ( g[i + 1] - g[i] == 1 )
+                    {
+                        consecutiveCount++;
+                    }
+                }
+                return consecutiveCount > 0;
+            }).ToList();
+
+            var nums22 = data.Where(g =>
+            {
+                int consecutiveCount = 0;
+                if ( (g[1] - g[0] == 1 && g[3] - g[2] == 1 && g[2] - g[1] > 1 && g[4] - g[3] > 1 && g[5] - g[4] > 1) ||
+                     (g[1] - g[0] == 1 && g[4] - g[3] == 1 && g[2] - g[1] > 1 && g[3] - g[2] > 1 && g[5] - g[4] > 1) ||
+                     (g[1] - g[0] == 1 && g[5] - g[4] == 1 && g[2] - g[1] > 1 && g[3] - g[2] > 1 && g[4] - g[3] > 1) ||
+                     (g[2] - g[1] == 1 && g[4] - g[3] == 1 && g[1] - g[0] > 1 && g[3] - g[2] > 1 && g[5] - g[4] > 1) ||
+                     (g[2] - g[1] == 1 && g[5] - g[4] == 1 && g[1] - g[0] > 1 && g[3] - g[2] > 1 && g[4] - g[3] > 1) ||
+                     (g[3] - g[2] == 1 && g[5] - g[4] == 1 && g[1] - g[0] > 1 && g[2] - g[1] > 1 && g[4] - g[3] > 1) )
+                {
+                    consecutiveCount++;
+                }
+                return consecutiveCount > 0;
+            }).ToList();
+
+            var nums3 = data.Where(g =>
+            {
+                int consecutiveCount = 0;
+                for ( int i = 0; i < g.Length - 2; i++ )
+                {
+                    if ( g[i + 1] - g[i] == 1 && g[i + 2] - g[i + 1] == 1 )
+                    {
+                        consecutiveCount++;
+                    }
+                }
+                return consecutiveCount > 0;
+            }).ToList();
+
+            var nums4 = data.Where(g =>
+            {
+                int consecutiveCount = 0;
+                for ( int i = 0; i < g.Length - 3; i++ )
+                {
+                    if ( g[i + 1] - g[i] == 1 && g[i + 2] - g[i + 1] == 1 && g[i + 3] - g[i + 2] == 1 )
+                    {
+                        consecutiveCount++;
+                    }
+                }
+                return consecutiveCount > 0;
+            }).ToList();
+
+            switch ( value )
+            {
+                case 0:
+                    nums = nums0;
+                    break;
+                case 2:
+                    nums = nums2.Except(nums3).ToList();
+                    break;
+                case 3:
+                    nums = nums3.Except(nums4).ToList(); ;
+                    break;
+                case 4:
+                    nums = nums4;
+                    break;
+                case 22:
+                    nums = nums22;
+                    break;
+                default:
+
+                    break;
+            }
+
+            PrintHelper.PrintForecastResult(string.Format("经{0}连号法过滤后余{1}组", value, nums.Count()));
             return nums;
         }
 
@@ -359,101 +408,56 @@ namespace UnionLotto
                 var one = g.Count(n => n % 3 == 1);
                 var two = g.Count(n => n % 3 == 2);
 
-                return zer == values[0] && one == values[1] && two == values[2];
+                var b = values.All(v => zer != v && one != v && two != v);
+
+                var b1 = zer == 0 && one == 2 && two == 4;
+
+                var b2 = zer == 3 && one == 3 && two == 0;
+                var b3 = zer == 0 && one == 3 && two == 3;
+                var b4 = zer == 3 && one == 0 && two == 3;
+
+                return b && !b1 && !b2 && !b3 && !b4;
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经012路过滤后余{0}组", nums.Count()));
             return nums;
         }
 
-
-
         /// <summary>
-        /// 第1个红色球大小过滤。注意：需要每次修改判断条件
+        /// 大中小过滤。
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="value"></param>
+        /// <param name="values"></param>
+        /// <remarks>
+        /// 1-11为小；12-22为中；23-33为大
+        /// </remarks>
         /// <returns></returns>
-        public static IList<int[]> FilterByFirstValue(IList<int[]> data, int value)
+        public static IList<int[]> FilterByBigMiddleSmall(IList<int[]> data, int[] values)
         {
             var nums = data.Where(g =>
             {
-                return g[0] > value;
+                var big = g.Count(n => n >= 23);
+                var middle = g.Count(n => n >= 12 && n <= 22);
+                var small = g.Count(n => n <= 11);
+
+                var b = values.All(v => big != v && middle != v && small != v);
+
+                var b1 = big == 3 && middle == 0 && small == 3;
+                var b2 = big == 3 && middle == 3 && small == 0;
+                var b3 = big == 0 && middle == 3 && small == 3;
+                var b4 = big == 0 && middle == 2 && small == 4;
+                var b5 = big == 1 && middle == 1 && small == 4;
+
+                return b && !b1 && !b2 && !b3 && !b4 && b5;
             }).ToList();
 
-            PrintHelper.PrintForecastResult(string.Format("经第1个红色球大小过滤后余{0}组", nums.Count()));
+            PrintHelper.PrintForecastResult(string.Format("经大中小过滤后余{0}组", nums.Count()));
             return nums;
         }
 
-        /// <summary>
-        /// 第1个红色球奇偶过滤。
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="value">取值0或1，0表示偶数，1表示奇数</param>
-        /// <returns></returns>
-        public static IList<int[]> FilterByFirstOddEven(IList<int[]> data, int value)
-        {
-            var nums = data.Where(g =>
-            {
-                return (g[0] & 1) == value;
-            }).ToList();
+        #endregion
 
-            PrintHelper.PrintForecastResult(string.Format("经第1个红色球奇偶过滤后余{0}组", nums.Count()));
-            return nums;
-        }
-
-        /// <summary>
-        /// 第2个红色球奇偶过滤。
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="value">取值0或1，0表示偶数，1表示奇数</param>
-        /// <returns></returns>
-        public static IList<int[]> FilterBySecondOddEven(IList<int[]> data, int value)
-        {
-            var nums = data.Where(g =>
-            {
-                return (g[1] & 1) == value;
-            }).ToList();
-
-            PrintHelper.PrintForecastResult(string.Format("经第2个红色球奇偶过滤后余{0}组", nums.Count()));
-            return nums;
-        }
-
-        /// <summary>
-        /// 第6个红色球大小过滤。注意：需要每次修改判断条件
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static IList<int[]> FilterBySixthValue(IList<int[]> data, int value)
-        {
-            var nums = data.Where(g =>
-            {
-                return g[^1] > value;
-            }).ToList();
-
-            PrintHelper.PrintForecastResult(string.Format("经第6个红色球大小过滤后余{0}组", nums.Count()));
-            return nums;
-        }
-
-        /// <summary>
-        /// 第6个红色球奇偶过滤。
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="value">取值0或1，0表示偶数，1表示奇数</param>
-        /// <returns></returns>
-        public static IList<int[]> FilterBySixthOddEven(IList<int[]> data, int value)
-        {
-            var nums = data.Where(g =>
-            {
-                return (g[^1] & 1) == value;
-            }).ToList();
-
-            PrintHelper.PrintForecastResult(string.Format("经第6个红色球奇偶过滤后余{0}组", nums.Count()));
-            return nums;
-        }
-
-
+        #region 自研方法过滤
 
         /// <summary>
         /// 加减计算法过滤
@@ -615,9 +619,96 @@ namespace UnionLotto
             return nums;
         }
 
+        #endregion
 
+        #region 红色球单个过滤
 
+        /// <summary>
+        /// 第1个红色球大小过滤。注意：需要每次修改判断条件
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static IList<int[]> FilterByFirstValue(IList<int[]> data, int value = 17)
+        {
+            var nums = data.Where(g =>
+            {
+                return g[0] < value;
+            }).ToList();
 
+            PrintHelper.PrintForecastResult(string.Format("经第1个红色球大小过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 第1个红色球奇偶过滤。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value">取值0或1，0表示偶数，1表示奇数</param>
+        /// <returns></returns>
+        public static IList<int[]> FilterByFirstOddEven(IList<int[]> data, int value)
+        {
+            var nums = data.Where(g =>
+            {
+                return (g[0] & 1) == value;
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经第1个红色球奇偶过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 第2个红色球奇偶过滤。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value">取值0或1，0表示偶数，1表示奇数</param>
+        /// <returns></returns>
+        public static IList<int[]> FilterBySecondOddEven(IList<int[]> data, int value)
+        {
+            var nums = data.Where(g =>
+            {
+                return (g[1] & 1) == value;
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经第2个红色球奇偶过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 第6个红色球大小过滤。注意：需要每次修改判断条件
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static IList<int[]> FilterBySixthValue(IList<int[]> data, int value = 16)
+        {
+            var nums = data.Where(g =>
+            {
+                return g[^1] > value;
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经第6个红色球大小过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 第6个红色球奇偶过滤。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value">取值0或1，0表示偶数，1表示奇数</param>
+        /// <returns></returns>
+        public static IList<int[]> FilterBySixthOddEven(IList<int[]> data, int value)
+        {
+            var nums = data.Where(g =>
+            {
+                return (g[^1] & 1) == value;
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经第6个红色球奇偶过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        #endregion
 
 
 
