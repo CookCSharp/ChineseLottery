@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.WebSockets;
+
 using UnionLotto.Tool;
 
 namespace UnionLotto
@@ -36,6 +37,15 @@ namespace UnionLotto
      * (1*9) 10=1合6,    11=2合7,    12=3合8,  13=4合9,  14=5合0,  15=6合1,  16=7合2,  17=8合3,  18=9合4, 
      * (2*9) 19=10=1合6, 20=2合7,    21=3合8,  22=4合9,  23=5合0,  24=6合1,  25=7合2,  26=8合3,  27=9合4, 
      * (3*9) 28=10=1合6, 29=11=2合7, 30=3合8,  31=4合9,  32=5合0,  33=6合1
+     * 1+10+19+28=58     
+     * 2+11+20+29=62
+     * 3+12+21+30=66
+     * 4+13+22+31=70
+     * 5+14+23+32=74
+     * 6+15+24+22=67
+     * 7+16+25=48
+     * 8+17+26=51
+     * 9+18+27=54
      * 
      * 
      * 04 05 13 14 20 21 27 28 29，每期开奖红色号码中必有1个在此9个号中出现
@@ -43,6 +53,17 @@ namespace UnionLotto
      * 
      * 红色球第3位，尾数定胆轨迹：
      * 047，158，269，370，481，592，603，714，825，936
+     * 
+     * 
+     * 合数单：1,3,5,7,9,10,12,14,16
+     * 合数双：2,4,6,8,11,13,15
+     * 
+     * 
+     * 金：09 10 21 22 33；
+     * 木：03 04 15 16 27 28；
+     * 水：01 12 13 24 25；
+     * 火：06 07 18 19 30 31；
+     * 土：02 05 08 11 14 17 20 23 26 29 32
      * 
      * 
      * 0路   1路   2路   
@@ -91,16 +112,22 @@ namespace UnionLotto
                 //SelectHelper.CalculatePlusAndSubtractLotto();
                 //SelectHelper.CalculateSumDivisionLotto();
                 //SelectHelper.Calculate9And11Lotto();
-                //SelectHelper.CalulateProbableMantissa();
-                //SelectHelper.CalulateProbableMiddle();
-                //SelectHelper.CalulateProbableGoldedCut();
-                //SelectHelper.CalulatePassword();
+                //SelectHelper.CalculateProbableMantissa();
+                //SelectHelper.CalculateProbableMiddle();
+                //SelectHelper.CalculateProbableGoldedCut();
+                //SelectHelper.CalculateProbableRed();
+                //SelectHelper.CalculateSumSubtract();
+                //SelectHelper.CalculateByRetoreValue(9);
 
-                //SelectHelper.CalculateBlueLotto();
+                //SelectHelper.CaculateFirstLotto();
+                //SelectHelper.CalculatePassword();
+
+                //SelectHelper.CalculateColdHotWarm();
+
+                //SelectHelper.CalculateExcludeBlueLotto();
                 //SelectHelper.CalculateBlueWithRedSubtract();
 
-                Forecast.GuessCommonPeriodLotto();
-                //Forecast.GuessCurrentPeriodLotto();
+                Forecast.GuessCurrentPeriodLotto();
             }
         }
     }

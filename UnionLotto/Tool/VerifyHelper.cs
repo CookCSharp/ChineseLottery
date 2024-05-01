@@ -26,9 +26,9 @@ namespace UnionLotto.Tool
     /// </remarks>
     public class VerifyHelper
     {
-        private static int PrintPeriodIndex = 51; //打印50期以内的详细信息
         private static bool _isViewDetail = true; //是否查看详细信息
-        private static int[] _historyPeriodsViewDetail = new int[] { 200 }; //查看详细信息
+        private static int[] _historyPeriodsViewDetail = new int[] { 500 }; //查看详细信息
+        private static int PrintPeriodIndex = 101; //打印100期以内的详细信息
         private static int[] _historyPeriods = new int[] { 10, 20, 50, 100, 1000 }; //查看统计信息
         private static LinkedList<string> Summary = new LinkedList<string>();
 
@@ -38,7 +38,7 @@ namespace UnionLotto.Tool
         /// <param name="isContainRecentLotto">是否验证包含最近一次开奖结果</param>
         public static void VerifyPastResults(bool isContainRecentLotto)
         {
-            if ( !isContainRecentLotto )
+            if (!isContainRecentLotto)
                 History.Instance.StartGuess();
             else
                 History.Instance.EndGuess();
@@ -48,15 +48,19 @@ namespace UnionLotto.Tool
 
             //VerifyPlusAndSubtract();
             //VerifySumDivision();
-            //Verify9And11();
+            //Verify2911();
             //VerifyEveryPeriodHave();
+            //VerifyEdge();
             //VerifyPrimeNum();
-
             //VerifyMantissa();
             //VerifyMiddle();
             //VerifyGoldedCut();
+            //VerifyProbableRed();
+            //VerifySumSubtract();
 
             VerifyPassword();
+
+            //VerifyBlueWithRedSubtract();
 
             //PrintHelper.PrintVerifyResult("综合测试结果得出结论如下：", ConsoleColor.Green);
             //Console.WriteLine();
@@ -84,15 +88,17 @@ namespace UnionLotto.Tool
         }
 
         /// <summary>
-        /// 验证9、11进制法
+        /// 验证2、9、11进制法
         /// </summary>
-        public static void Verify9And11()
+        public static void Verify2911()
         {
-            //InternalVerifyZero(() => SelectHelper.Calculate9And11Lotto(9, false), "9进制计算法");
-            //InternalVerifyZero(() => SelectHelper.Calculate9And11Lotto(11, false), "11进制计算法");
+            //InternalVerifyZero(() => SelectHelper.Calculate2911Lotto(2, false), "2进制计算法");
+            //InternalVerifyZero(() => SelectHelper.Calculate2911Lotto(9, false), "9进制计算法");
+            //InternalVerifyZero(() => SelectHelper.Calculate2911Lotto(11, false), "11进制计算法");
 
-            InternalVerify(() => SelectHelper.Calculate9And11Lotto(9, false), "9进制计算法");
-            InternalVerify(() => SelectHelper.Calculate9And11Lotto(11, false), "11进计算制法");
+            InternalVerify(() => SelectHelper.Calculate2911Lotto(2, false), "2进制计算法");
+            InternalVerify(() => SelectHelper.Calculate2911Lotto(9, false), "9进制计算法");
+            InternalVerify(() => SelectHelper.Calculate2911Lotto(11, false), "11进计算制法");
         }
 
         /// <summary>
@@ -103,6 +109,16 @@ namespace UnionLotto.Tool
             //InternalVerifyZero(() => Data.EveryHaveNums, "每期必有号码法");
 
             InternalVerify(() => Data.EveryHaveNums, "每期必有号码法");
+        }
+
+        /// <summary>
+        /// 验证边缘码
+        /// </summary>
+        public static void VerifyEdge()
+        {
+            //InternalVerifyZero(() => Data.EdgeLotto, "边缘码法");
+
+            InternalVerify(() => Data.EdgeLotto, "边缘码法");
         }
 
         /// <summary>
@@ -156,7 +172,7 @@ namespace UnionLotto.Tool
         public static void VerifyMiddle()
         {
             //InternalVerifyZero(() => SelectHelper.CalulateProbableMiddle(false), "中间数定胆法");
-            InternalVerify(() => SelectHelper.CalulateProbableMiddle(false), "中间数定胆法");
+            InternalVerify(() => SelectHelper.CalculateProbableMiddle(false), "中间数定胆法");
         }
 
         /// <summary>
@@ -165,7 +181,25 @@ namespace UnionLotto.Tool
         public static void VerifyGoldedCut()
         {
             //InternalVerifyZero(() => SelectHelper.CalulateProbableGoldedCut(false), "黄金分割定胆法");
-            InternalVerify(() => SelectHelper.CalulateProbableGoldedCut(false), "黄金分割定胆法");
+            InternalVerify(() => SelectHelper.CalculateProbableGoldedCut(false), "黄金分割定胆法");
+        }
+
+        /// <summary>
+        /// 验证规律计算定胆法
+        /// </summary>
+        public static void VerifyProbableRed()
+        {
+            //InternalVerifyZero(() => SelectHelper.CalulateProbableRed(false), "规律计算定胆法");
+            InternalVerify(() => SelectHelper.CalculateProbableRed(false), "规律计算定胆法");
+        }
+
+        /// <summary>
+        /// 验证差值之和定胆法
+        /// </summary>
+        public static void VerifySumSubtract()
+        {
+            //InternalVerifyZero(() => SelectHelper.CalculateSumSubtract(false), "差值之和定胆法");
+            InternalVerify(() => SelectHelper.CalculateSumSubtract(false), "差值之和定胆法");
         }
 
         /// <summary>
@@ -173,14 +207,21 @@ namespace UnionLotto.Tool
         /// </summary>
         public static void VerifyPassword()
         {
-            InternalVerifyPassword(() => SelectHelper.CalulatePassword(false), "明暗点计算法");
-            //InternalVerify(() => SelectHelper.CalulatePassword(false), "明暗点计算法");
+            InternalVerifyPassword(() => SelectHelper.CalculatePassword(false), "明暗点计算法");
+        }
+
+        /// <summary>
+        /// 验证红球两两相减排除篮球法
+        /// </summary>
+        public static void VerifyBlueWithRedSubtract()
+        {
+            InternalVerifyBlue(() => SelectHelper.CalculateBlueWithRedSubtract(false), "红球两两相减排除篮球法");
         }
 
         private static void InternalVerifyZero(Func<IList<int>> func, string methodName, bool isCalculateMantissa = false)
         {
             var historyPeriods = _isViewDetail ? _historyPeriodsViewDetail : _historyPeriods;
-            for ( int i = 0; i < historyPeriods.Length; i++ )
+            for (int i = 0; i < historyPeriods.Length; i++)
             {
                 History.Instance.GetData(historyPeriods[i] + 1, out var historyRedData, out var historyData);
 
@@ -188,7 +229,7 @@ namespace UnionLotto.Tool
                 var resultCount = new LinkedList<int>();
                 var resultDictionary = new HashSet<string>();
 
-                for ( int j = 0; j < historyData.Count - 1; j++ )
+                for (int j = 0; j < historyData.Count - 1; j++)
                 {
                     var lastPeriodLotto = historyData.ElementAt(j).Value;
                     var nextPeriodLotto = historyRedData.ElementAt(j + 1).Value;
@@ -199,7 +240,7 @@ namespace UnionLotto.Tool
                     var res = func();
 
                     IEnumerable<int> contains_Result;
-                    if ( isCalculateMantissa )
+                    if (isCalculateMantissa)
                     {
                         contains_Result = nextPeriodLotto.Where(n => res.Contains(n % 10));
                         resultCount.AddLast(contains_Result.DistinctBy(n => n % 10).Count());
@@ -212,11 +253,11 @@ namespace UnionLotto.Tool
                         resultDetails.AddLast($"{nextPeriod}期开奖号码为：{string.Join(" ", correct.Select(n => n.ToString("D2")))}，共命中{contains_Result.Count()}个，分别是：{string.Join(" ", contains_Result.Select(n => n.ToString("D2")))}");
                     }
 
-                    if ( contains_Result.Count() == 0 && historyData.Count <= PrintPeriodIndex )
+                    if (contains_Result.Count() == 0 && historyData.Count <= PrintPeriodIndex)
                         resultDictionary.Add(nextPeriod);
                 }
 
-                if ( _isViewDetail )
+                if (_isViewDetail)
                 {
                     //以下为打印详细结果所用
                     resultDetails.ToList().ForEach(r => PrintHelper.Print(r, ConsoleColor.DarkGreen));
@@ -229,10 +270,10 @@ namespace UnionLotto.Tool
                     var message = string.Format("一次都未命中的共{0}组，概率为{1}%", zeroCount, Math.Round((double)zeroCount / resultCount.Count() * 100D, 2));
                     PrintHelper.PrintVerifyResult($"{startPeriod}-{endPeriod}总共{resultCount.Count}组数据，{methodName}" + message);
 
-                    if ( historyData.Count <= PrintPeriodIndex )
+                    if (historyData.Count <= PrintPeriodIndex)
                         PrintHelper.PrintVerifyResult(string.Format("命中个数依次为：{0}", string.Join(" ", resultCount)));
 
-                    if ( resultDictionary.Count() > 0 && historyData.Count <= PrintPeriodIndex )
+                    if (resultDictionary.Count() > 0 && historyData.Count <= PrintPeriodIndex)
                         PrintHelper.PrintVerifyResult(string.Format("未命中期数依次为：{0}", string.Join("、", resultDictionary.OrderByDescending(s => s))));
                 }
             }
@@ -246,14 +287,14 @@ namespace UnionLotto.Tool
         {
             var historyPeriods = _isViewDetail ? _historyPeriodsViewDetail : _historyPeriods;
             var resultDictionary = new List<string>();
-            for ( int i = 0; i < historyPeriods.Length; i++ )
+            for (int i = 0; i < historyPeriods.Length; i++)
             {
                 History.Instance.GetData(historyPeriods[i] + 1, out var historyRedData, out var historyData);
 
                 var resultDetails = new LinkedList<string>();
                 var resultCount = new LinkedList<int>();
 
-                for ( int j = 0; j < historyData.Count - 1; j++ )
+                for (int j = 0; j < historyData.Count - 1; j++)
                 {
                     var lastPeriodLotto = historyData.ElementAt(j).Value;
                     var nextPeriodLotto = historyRedData.ElementAt(j + 1).Value;
@@ -264,7 +305,7 @@ namespace UnionLotto.Tool
                     var res = func();
 
                     IEnumerable<int> contains_Result;
-                    if ( isCalculateMantissa )
+                    if (isCalculateMantissa)
                     {
                         contains_Result = nextPeriodLotto.Where(n => res.Contains(n % 10));
                         resultCount.AddLast(contains_Result.DistinctBy(n => n % 10).Count());
@@ -278,7 +319,7 @@ namespace UnionLotto.Tool
                     }
                 }
 
-                if ( _isViewDetail )
+                if (_isViewDetail)
                 {
                     //以下为打印详细结果所用
                     resultDetails.ToList().ForEach(r => PrintHelper.Print(r, ConsoleColor.DarkGreen));
@@ -289,7 +330,7 @@ namespace UnionLotto.Tool
                     var endPeriod = historyData.Last().Key;
                     var groupDictionary = new Dictionary<string, double>();
                     PrintHelper.PrintVerifyResult($"{startPeriod}-{endPeriod}总共{resultCount.Count}组数据，{methodName}测试的结果如下：");
-                    for ( int k = 0; k <= 6; k++ )
+                    for (int k = 0; k <= 6; k++)
                     {
                         var count = resultCount.Where(n => n == k).Count();
                         var message = string.Format("命中{0}个：共{1}组，概率：{2}%", k, count, Math.Round((double)count / resultCount.Count() * 100D, 2));
@@ -297,7 +338,7 @@ namespace UnionLotto.Tool
                         PrintHelper.PrintVerifyResult(message);
                     }
 
-                    if ( historyData.Count <= PrintPeriodIndex )
+                    if (historyData.Count <= PrintPeriodIndex)
                         PrintHelper.PrintVerifyResult(string.Format("命中个数依次为：{0}", string.Join(" ", resultCount)));
 
                     //统计信息中同概率的数未列举出来???
@@ -316,7 +357,7 @@ namespace UnionLotto.Tool
         private static void InternalVerifyPassword(Func<IList<int>> func, string methodName)
         {
             var historyPeriods = _isViewDetail ? _historyPeriodsViewDetail : _historyPeriods;
-            for ( int i = 0; i < historyPeriods.Length; i++ )
+            for (int i = 0; i < historyPeriods.Length; i++)
             {
                 History.Instance.GetData(historyPeriods[i] + 1, out var historyRedData, out var historyData);
 
@@ -324,7 +365,7 @@ namespace UnionLotto.Tool
                 var resultCounts = new List<int>();
                 var resultDictionary = new HashSet<string>();
 
-                for ( int j = 0; j < historyData.Count - 1; j++ )
+                for (int j = 0; j < historyData.Count - 1; j++)
                 {
                     var lastPeriodLotto = historyData.ElementAt(j).Value;
                     var nextPeriodRedLotto = historyRedData.ElementAt(j + 1).Value;
@@ -334,7 +375,14 @@ namespace UnionLotto.Tool
                     Data.SetRedBlueLotto(lastPeriodLotto);
                     var res = func();
 
-                    if ( res[0] == 121 && res[1] == 76 )
+                    //2021057,2021108,2022003,2022149,2023009,2023076,2023102,2023149
+                    if (res[0] == 90 && res[1] == 81)
+                    {
+
+                    }
+
+                    //2021052,2022067,2022113,2022141,2023011,2023142
+                    if (res[0] == 105 && res[1] == 105)
                     {
 
                     }
@@ -349,6 +397,7 @@ namespace UnionLotto.Tool
                     num2 = num2 / 100 + num2 / 10 + num2 % 10;
                     num2 = num2 / 10 + num2 % 10;
 
+                    var index = res.IndexOf(333);
                     resultDictionary.Add(string.Join("/", res.Take(2)));
 
                     //if (contains_Result.Count() == 0 && historyData.Count <= PrintPeriodIndex)
@@ -358,10 +407,10 @@ namespace UnionLotto.Tool
                     //以下为打印详细结果所用
                     //resultDetails.Add($"{nextPeriod}期开奖号码为：{string.Join(" ", correct.Select(n => n.ToString("D2")))}，共命中{contains_Result.Count()}个，明暗点：{string.Join("/", res.Take(2))}，明暗点尾数：{string.Join(" ", res.Skip(2))}");
                     //resultDetails.Add($"{nextPeriod}期开奖号码为：{string.Join(" ", correct.Select(n => n.ToString("D2")))}，合值分别为：{num1}、{num2}");
-                    resultDetails.Add(string.Format("{0}期开奖号码：{1}，合值分别为：{2}、{3}，明暗点：{4}，明暗点尾数：{5}", nextPeriod, string.Join(" ", correct), num1, num2, string.Join("/", res.Take(2)), string.Join(" ", res.Skip(2))));
+                    resultDetails.Add(string.Format("{0}期开奖号码：{1}，合数分别为：{2}、{3}，明暗点：{4}，明暗点尾数：{5}，隔3点数{6}，命中{7}个", nextPeriod, string.Join(" ", correct), num1, num2, string.Join("/", res.Take(2)), string.Join(" ", res.Skip(2).Take(index - 2)), string.Join(" ", res.Skip(index + 1)), nextPeriodRedLotto.Count(n => res.Skip(index + 1).Contains(n))));
                 }
 
-                if ( _isViewDetail )
+                if (_isViewDetail)
                 {
                     //以下为打印详细结果所用
                     resultDetails.ToList().ForEach(r => PrintHelper.Print(r, ConsoleColor.DarkGreen));
@@ -374,15 +423,66 @@ namespace UnionLotto.Tool
                     var message = string.Format("一次都未命中的共{0}组，概率为{1}%", zeroCount, Math.Round((double)zeroCount / resultCounts.Count() * 100D, 2));
                     PrintHelper.PrintVerifyResult($"{startPeriod}-{endPeriod}总共{resultCounts.Count}组数据，{methodName}" + message);
 
-                    if ( historyData.Count <= PrintPeriodIndex )
+                    if (historyData.Count <= PrintPeriodIndex)
                         PrintHelper.PrintVerifyResult(string.Format("命中明暗点数依次为：{0}", string.Join(" ", resultCounts.Select(g => string.Join("/", g)))));
 
-                    if ( resultDictionary.Count() > 0 && historyData.Count <= PrintPeriodIndex )
+                    if (resultDictionary.Count() > 0 && historyData.Count <= PrintPeriodIndex)
                         PrintHelper.PrintVerifyResult(string.Format("未命中期数依次为：{0}", string.Join("、", resultDictionary.OrderByDescending(s => s))));
                 }
             }
 
             Console.WriteLine();
+            Console.WriteLine();
+        }
+
+        private static void InternalVerifyBlue(Func<IList<int>> func, string methodName)
+        {
+            var historyPeriods = _isViewDetail ? _historyPeriodsViewDetail : _historyPeriods;
+            for (int i = 0; i < historyPeriods.Length; i++)
+            {
+                History.Instance.GetData(historyPeriods[i] + 1, out var historyRedData, out var historyData);
+
+                var resultDetails = new List<string>();
+                var resultCounts = new List<int>();
+                var resultDictionary = new HashSet<string>();
+
+                for (int j = 0; j < historyData.Count - 1; j++)
+                {
+                    var lastPeriodLotto = historyData.ElementAt(j).Value;
+                    var nextPeriodLotto = historyData.ElementAt(j + 1).Value;
+                    var nextPeriod = historyData.ElementAt(j + 1).Key;
+                    var correct = historyData.ElementAt(j + 1).Value.Select(n => n.ToString("D2"));
+
+                    Data.SetRedBlueLotto(lastPeriodLotto);
+                    var res = func();
+
+                    var contain = res.Contains(nextPeriodLotto[^1]);
+
+                    //以下为打印详细结果所用
+                    resultDetails.Add(string.Format("{0}期开奖号码：{1}，排除蓝号：{2}，{3}", nextPeriod, string.Join(" ", correct), string.Join(" ", res), contain ? "排除错误" : "排除正确"));
+                }
+
+                if (_isViewDetail)
+                {
+                    //以下为打印详细结果所用
+                    resultDetails.ToList().ForEach(r => PrintHelper.Print(r, ConsoleColor.DarkGreen));
+                }
+                else
+                {
+                    var startPeriod = historyData.ElementAt(1).Key;
+                    var endPeriod = historyData.Last().Key;
+                    var zeroCount = resultCounts.Where(n => n == 0).Count();
+                    var message = string.Format("一次都未命中的共{0}组，概率为{1}%", zeroCount, Math.Round((double)zeroCount / resultCounts.Count() * 100D, 2));
+                    PrintHelper.PrintVerifyResult($"{startPeriod}-{endPeriod}总共{resultCounts.Count}组数据，{methodName}" + message);
+
+                    if (historyData.Count <= PrintPeriodIndex)
+                        PrintHelper.PrintVerifyResult(string.Format("命中明暗点数依次为：{0}", string.Join(" ", resultCounts.Select(g => string.Join("/", g)))));
+
+                    if (resultDictionary.Count() > 0 && historyData.Count <= PrintPeriodIndex)
+                        PrintHelper.PrintVerifyResult(string.Format("未命中期数依次为：{0}", string.Join("、", resultDictionary.OrderByDescending(s => s))));
+                }
+            }
+
             Console.WriteLine();
             Console.WriteLine();
         }

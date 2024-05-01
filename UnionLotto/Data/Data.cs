@@ -19,17 +19,18 @@ namespace UnionLotto
     public class Data
     {
         //记得每次更新历史数据文件
+        //47期：7, 8, 21, 26, 29, 30, 15
 
 
         /// <summary>
         /// 上期开奖号码
         /// </summary>
-        public static int[] PreRedBlueLotto = new int[7] { 2, 4, 5, 14, 26, 32, 14 }; //2, 4, 5, 14, 26, 32, 14
+        public static int[] PreRedBlueLotto = new int[7] { 2, 9, 15, 19, 26, 28, 2 }; //2, 9, 15, 19, 26, 28, 2
 
         /// <summary>
         /// 下期开奖期数
         /// </summary>
-        public const int CurrentPeriod = 43; //仅仅打印信息所用
+        public const int CurrentPeriod = 49; //打印信息和篮球排除所用
 
         /// <summary>
         /// 每期开奖必有红色号码
@@ -65,14 +66,54 @@ namespace UnionLotto
         public static int[] EdgeLotto = new int[14] { 1, 5, 6, 10, 11, 15, 16, 20, 21, 25, 26, 30, 31, 33 };
 
         /// <summary>
-        /// 红色号码最小和值
+        /// 红色号码。五行“金”
         /// </summary>
-        public const int MinRedSum = 21;
+        public static int[] GoldLotto = new int[5] { 09, 10, 21, 22, 33 };
 
         /// <summary>
-        /// 红色号码最大和值
+        /// 红色号码。五行“木”
         /// </summary>
-        public const int MaxRedSum = 183;
+        public static int[] WoodLotto = new int[6] { 03, 04, 15, 16, 27, 28 };
+
+        /// <summary>
+        /// 红色号码。五行“水”
+        /// </summary>
+        public static int[] WaterLotto = new int[5] { 01, 12, 13, 24, 25 };
+
+        /// <summary>
+        /// 红色号码。五行“火”
+        /// </summary>
+        public static int[] FireLotto = new int[6] { 06, 07, 18, 19, 30, 31 };
+
+        /// <summary>
+        /// 红色号码。五行“土”
+        /// </summary>
+        public static int[] EarthLotto = new int[11] { 02, 05, 08, 11, 14, 17, 20, 23, 26, 29, 32 };
+
+        /// <summary>
+        /// 合0/5
+        /// </summary>
+        public static int[] Composite05 = new int[4] { 05, 14, 23, 32 };
+
+        /// <summary>
+        /// 合1/6
+        /// </summary>
+        public static int[] Composite16 = new int[8] { 01, 10, 19, 28, 06, 15, 24, 33 };
+
+        /// <summary>
+        /// 合2/7
+        /// </summary>
+        public static int[] Composite27 = new int[7] { 02, 11, 20, 29, 07, 16, 25 };
+
+        /// <summary>
+        /// 合3/8
+        /// </summary>
+        public static int[] Composite38 = new int[7] { 03, 12, 21, 30, 08, 17, 26 };
+
+        /// <summary>
+        /// 合4/9
+        /// </summary>
+        public static int[] Composite49 = new int[7] { 04, 13, 22, 31, 09, 18, 27 };
 
         public static void SetRedBlueLotto(IEnumerable<int> lotto) => PreRedBlueLotto = lotto.ToArray();
 
@@ -81,6 +122,16 @@ namespace UnionLotto
             //通过观察可知
             //命中个数>=4个
             //重复号码中有0-2个号码可能出现
+
+            var data47 = new int[7] { 7, 8, 21, 26, 29, 30, 15 };
+
+            var data46 = new int[7] { 2, 6, 10, 11, 17, 29, 15 };
+
+            var data45 = new int[7] { 2, 8, 19, 23, 24, 26, 3 };
+
+            var data44 = new int[7] { 2, 6, 17, 25, 32, 33, 6 };
+
+            var data43 = new int[7] { 4, 6, 7, 14, 15, 24, 8 };
 
             var data42 = new int[7] { 2, 4, 5, 14, 26, 32, 14 };
 
