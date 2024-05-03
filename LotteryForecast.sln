@@ -5,7 +5,9 @@ VisualStudioVersion = 17.6.33927.249
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupperLotto", "SupperLotto\SupperLotto.csproj", "{BD74F8E7-8B97-48D1-B30D-5E2B43C87513}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnionLotto", "UnionLotto\UnionLotto.csproj", "{19D5F777-B571-4A8B-A40A-1FC002E1BD81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnionLotto", "UnionLotto\UnionLotto.csproj", "{19D5F777-B571-4A8B-A40A-1FC002E1BD81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeDLotto", "ThreeDLotto\ThreeDLotto.csproj", "{B3FABDAE-7633-4610-8BDF-E2581BB86F8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{19D5F777-B571-4A8B-A40A-1FC002E1BD81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19D5F777-B571-4A8B-A40A-1FC002E1BD81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19D5F777-B571-4A8B-A40A-1FC002E1BD81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3FABDAE-7633-4610-8BDF-E2581BB86F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3FABDAE-7633-4610-8BDF-E2581BB86F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3FABDAE-7633-4610-8BDF-E2581BB86F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3FABDAE-7633-4610-8BDF-E2581BB86F8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
