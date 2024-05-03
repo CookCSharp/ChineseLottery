@@ -40,7 +40,7 @@ namespace UnionLotto
         /// </summary>
         /// <param name="n"></param>
         /// <param name="k"></param>
-        /// <returns> 组合方式集合</returns>
+        /// <returns>组合方式集合</returns>
         public static List<int[]> GenerateCombinations(int n, int k)
         {
             List<int[]> combinations = new List<int[]>();

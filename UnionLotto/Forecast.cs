@@ -15,8 +15,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using UnionLotto.Tool;
-
 namespace UnionLotto
 {
     public class Forecast

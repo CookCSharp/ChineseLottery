@@ -3,8 +3,6 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.WebSockets;
 
-using UnionLotto.Tool;
-
 namespace UnionLotto
 {
     /*

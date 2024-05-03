@@ -16,7 +16,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnionLotto.Tool
+namespace UnionLotto
 {
     /// <summary>
     /// 开奖结果验证
