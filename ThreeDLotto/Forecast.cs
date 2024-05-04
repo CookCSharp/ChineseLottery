@@ -28,32 +28,32 @@ namespace ThreeDLotto
             //data = new List<int[]>()
             //{
             //    //new int[] { 2, 4, 2 },
-            //    new int[] { 0, 7, 5 },
+            //    //new int[] { 0, 7, 5 },
+            //    new int[] { 0, 9, 9 },
             //};
 
             //上期开组三时使用
-            //data = FilterHelper.FilterByGroupThreePreLotto(data);
+            data = FilterHelper.FilterByGroupThreePreLotto(data);
 
             data = FilterHelper.FilterByDistance5(data, [1, 2, 3]);
             data = FilterHelper.FilterByPreLotto(data, [0, 1, 2]);
 
-            //data = FilterHelper.FilterByHundreds012Path(data, [1]);
-            data = FilterHelper.FilterByHundredsValue(data, [1, 4, 7]);
-            //data = FilterHelper.FilterByTens012Path(data, [0, 1]);
-            data = FilterHelper.FilterByTensValue(data, [0, 4, 9]);
-            //data = FilterHelper.FilterByUnits012Path(data, [0, 1]);
-            data = FilterHelper.FilterByUnitsValue(data, [2, 3, 5, 7, 8]);
+            //data = FilterHelper.FilterByHundreds012Path(data, [1, 2]);
+            data = FilterHelper.FilterByHundredsValue(data, [5, 7]); //确定
+            //data = FilterHelper.FilterByTens012Path(data, [1, 2]);
+            data = FilterHelper.FilterByTensValue(data, [2, 4, 7, 8]); //确定
+            //data = FilterHelper.FilterByUnits012Path(data, [1, 2]);
+            data = FilterHelper.FilterByUnitsValue(data, [1, 2, 5, 7]); //确定
 
-            //data = FilterHelper.FilterByMax012Path(data, [0, 2]);
-            //data = FilterHelper.FilterByMin012Path(data, [0, 1]);
-            //data = FilterHelper.FilterByMiddle012Path(data, [1, 2]);
+            data = FilterHelper.FilterByMax012Path(data, [1, 2]);
+            data = FilterHelper.FilterByMin012Path(data, [0, 2]);
+            data = FilterHelper.FilterByMiddle012Path(data, [1, 2]);
             Console.WriteLine();
 
             data = FilterHelper.FilterBySum(data);
-            data = FilterHelper.FilterBySumMantissa(data, [0, 4, 6, 8, 9]);
-            data = FilterHelper.FilterBySpan(data, [5, 6, 7, 8, 9]);
-            //Console.WriteLine();
-            //data = FilterHelper.FilterByOddEvenRate(data, [3D / 0, 1D / 2, 2D / 1]);
+            data = FilterHelper.FilterBySumMantissa(data, [1, 3, 7]);
+            data = FilterHelper.FilterBySpan(data, [1, 2, 3, 5, 7]);
+            Console.WriteLine();
 
             data.ToList().ForEach(group =>
             {
