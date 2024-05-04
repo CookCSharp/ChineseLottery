@@ -21,8 +21,8 @@ namespace ThreeDLotto
     {
         private static bool _isViewDetail = false; //是否查看详细信息
         private static int[] _historyPeriodsViewDetail = new int[] { 100 }; //查看详细信息
-        private static int PrintPeriodIndex = 101; //打印100期以内的详细信息
-        private static int[] _historyPeriods = new int[] { 10, 20, 50, 100, 1000 }; //查看统计信息
+        private static int PrintPeriodIndex = 201; //打印100期以内的详细信息
+        private static int[] _historyPeriods = new int[] { 10, 50, 100, 200, 1000 }; //查看统计信息
 
 
         /// <summary>

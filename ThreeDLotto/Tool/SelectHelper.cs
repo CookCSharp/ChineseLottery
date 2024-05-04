@@ -184,5 +184,34 @@ namespace ThreeDLotto
 
             return include!;
         }
+
+        /// <summary>
+        /// 计算中间号码
+        /// </summary>
+        /// <returns></returns>
+        public static int CaculateMiddleNumber(int[] data)
+        {
+            var max = data.Max();
+            var min = data.Min();
+
+            var maxCount = data.Count(n => n == max);
+            var minCount = data.Count(n => n == min);
+
+            if (maxCount > minCount)
+            {
+                return max;
+            }
+            else if (maxCount < minCount)
+            {
+                return min;
+            }
+            else
+            {
+                if ((maxCount = minCount) == 3)
+                    return data.First();
+                else
+                    return data.Where(n => n != max && n != min).First();
+            }
+        }
     }
 }

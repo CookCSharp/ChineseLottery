@@ -21,12 +21,12 @@ namespace ThreeDLotto
         /// <summary>
         /// 上期开奖号码
         /// </summary>
-        public static int[] PreLotto = new int[3] { 2, 4, 2 };
+        public static int[] PreLotto = new int[3] { 0, 7, 5 };
 
         /// <summary>
         /// 下期开奖期数
         /// </summary>
-        public const int CurrentPeriod = 114;
+        public const int CurrentPeriod = 115;
 
         /// <summary>
         /// 所有号码

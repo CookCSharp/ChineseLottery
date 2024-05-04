@@ -141,10 +141,46 @@ namespace ThreeDLotto
 
             History.Instance.GetData(PeriodIndex, out var historyData);
 
-            var path012 = historyData.Values.Select(group => group.Max() % 2).ToList();
+            var path012 = historyData.Values.Select(group => group.Max() % 3).ToList();
             IsSubset(path012, values.ToList(), out List<int> periodIndexes);
 
             PrintHelper.PrintForecastResult(string.Format("满足最大值012路规律：{0} 的有以下几期", string.Join(" ", values)));
+            PrintHelper.PrintForecastResult(string.Join(" ", periodIndexes.Select(x => $"{historyData.ElementAt(x).Key}期")));
+        }
+
+        /// <summary>
+        /// 根据给出的最小值012路找出历史相同的规律
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="values"></param>
+        public static void FindMin012Path(int[] values)
+        {
+            Wait();
+
+            History.Instance.GetData(PeriodIndex, out var historyData);
+
+            var path012 = historyData.Values.Select(group => group.Min() % 3).ToList();
+            IsSubset(path012, values.ToList(), out List<int> periodIndexes);
+
+            PrintHelper.PrintForecastResult(string.Format("满足最小值012路规律：{0} 的有以下几期", string.Join(" ", values)));
+            PrintHelper.PrintForecastResult(string.Join(" ", periodIndexes.Select(x => $"{historyData.ElementAt(x).Key}期")));
+        }
+
+        /// <summary>
+        /// 根据给出的中间值012路找出历史相同的规律
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="values"></param>
+        public static void FindMid012Path(int[] values)
+        {
+            Wait();
+
+            History.Instance.GetData(PeriodIndex, out var historyData);
+
+            var path012 = historyData.Values.Select(group => SelectHelper.CaculateMiddleNumber(group.ToArray()) % 3).ToList();
+            IsSubset(path012, values.ToList(), out List<int> periodIndexes);
+
+            PrintHelper.PrintForecastResult(string.Format("满足中间值012路规律：{0} 的有以下几期", string.Join(" ", values)));
             PrintHelper.PrintForecastResult(string.Join(" ", periodIndexes.Select(x => $"{historyData.ElementAt(x).Key}期")));
         }
 

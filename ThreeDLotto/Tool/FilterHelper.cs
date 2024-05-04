@@ -124,6 +124,57 @@ namespace ThreeDLotto
             return nums;
         }
 
+        /// <summary>
+        /// 最大值012路过滤
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value">取值0、1、2</param>
+        /// <returns></returns>
+        public static IList<int[]> FilterByMax012Path(IList<int[]> data, int[] values)
+        {
+            var nums = data.Where(g =>
+            {
+                return values.Any(v => g.Max() % 3 == v);
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经最大值012路过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 最小值012路过滤
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value">取值0、1、2</param>
+        /// <returns></returns>
+        public static IList<int[]> FilterByMin012Path(IList<int[]> data, int[] values)
+        {
+            var nums = data.Where(g =>
+            {
+                return values.Any(v => g.Min() % 3 == v);
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经最小值012路过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
+        /// <summary>
+        /// 中间值012路过滤
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value">取值0、1、2</param>
+        /// <returns></returns>
+        public static IList<int[]> FilterByMiddle012Path(IList<int[]> data, int[] values)
+        {
+            var nums = data.Where(g =>
+            {
+                return values.Any(v => SelectHelper.CaculateMiddleNumber(g) % 3 == v);
+            }).ToList();
+
+            PrintHelper.PrintForecastResult(string.Format("经中间值012路过滤后余{0}组", nums.Count()));
+            return nums;
+        }
+
 
         /// <summary>
         /// 和值过滤。注意：每次需要修改条件
@@ -174,7 +225,7 @@ namespace ThreeDLotto
                 return values.Any(v => g.Max() - g.Min() == v);
             }).ToList();
 
-            PrintHelper.PrintForecastResult(string.Format("经和值过滤后余{0}组", nums.Count()));
+            PrintHelper.PrintForecastResult(string.Format("经跨度过滤后余{0}组", nums.Count()));
             return nums;
         }
 

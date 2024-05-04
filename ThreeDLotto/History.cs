@@ -33,7 +33,7 @@ namespace ThreeDLotto
 
         //所有开奖号码
         private const string AllURL = "https://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=3d";
-        //最近3000期开奖号码
+        //最近4000期开奖号码
         private const string URL = "https://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=3d&issueCount=&issueStart=&issueEnd=&dayStart=&dayEnd=&pageNo=1&pageSize=4000&week=&systemType=PC";
 
         private Dictionary<string, IList<int>> HistoryData = new Dictionary<string, IList<int>>();
