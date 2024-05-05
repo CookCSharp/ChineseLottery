@@ -27,7 +27,7 @@ namespace UnionLotto
     public class VerifyHelper
     {
         private static bool _isViewDetail = true; //是否查看详细信息
-        private static int[] _historyPeriodsViewDetail = new int[] { 500 }; //查看详细信息
+        private static int[] _historyPeriodsViewDetail = new int[] { 50 }; //查看详细信息
         private static int PrintPeriodIndex = 101; //打印100期以内的详细信息
         private static int[] _historyPeriods = new int[] { 10, 20, 50, 100, 1000 }; //查看统计信息
         private static LinkedList<string> Summary = new LinkedList<string>();

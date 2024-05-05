@@ -19,18 +19,18 @@ namespace UnionLotto
     public class Data
     {
         //记得每次更新历史数据文件
-        //47期：7, 8, 21, 26, 29, 30, 15
+        //48期：2, 9, 15, 19, 26, 28, 2
 
 
         /// <summary>
         /// 上期开奖号码
         /// </summary>
-        public static int[] PreRedBlueLotto = new int[7] { 2, 9, 15, 19, 26, 28, 2 }; //2, 9, 15, 19, 26, 28, 2
+        public static int[] PreRedBlueLotto = new int[7] { 12, 15, 17, 23, 26, 32, 11 }; //12, 15, 17, 23, 26, 32, 11
 
         /// <summary>
         /// 下期开奖期数
         /// </summary>
-        public const int CurrentPeriod = 49; //打印信息和篮球排除所用
+        public const int CurrentPeriod = 50; //打印信息和篮球排除所用
 
         /// <summary>
         /// 每期开奖必有红色号码

@@ -747,7 +747,7 @@ namespace UnionLotto
                 //Data.PreRedBlueLotto[3] % 10 + 4,
                 //Data.PreRedBlueLotto[3] % 10 + 4 + 10,
 
-                //8,5,1,5,7,12,16,
+                //6,7,13,5,10,8,12
 
                 //AC值乘2-6，必杀蓝
                 //上两期蓝尾相乘，尾加5，杀蓝
