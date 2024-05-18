@@ -186,8 +186,9 @@ namespace ThreeDLotto
             var nums = data.Where(g =>
             {
                 var sum = g.Sum();
-                var b1 = sum >= 0 && sum <= 14;
-                var b2 = sum % 3 == 1 || sum % 3 == 2;
+                var b1 = sum >= 5 && sum <= 23;
+                var b2 = sum % 3 == 0 || sum % 3 == 1;
+                //var b3 = sum % 2 == 1;
                 return b1 && b2;
             }).ToList();
 
@@ -196,36 +197,44 @@ namespace ThreeDLotto
         }
 
         /// <summary>
-        /// 和值尾过滤
+        /// 跨度过滤。注意：每次需要修改条件
         /// </summary>
         /// <param name="data"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static IList<int[]> FilterBySumMantissa(IList<int[]> data, int[] values)
+        public static IList<int[]> FilterBySpan(IList<int[]> data)
         {
             var nums = data.Where(g =>
             {
-                return values.Any(v => g.Sum() % 10 == v);
+                var span = g.Max() - g.Min();
+                var b1 = span % 3 == 1 || span % 3 == 2;
+                //var b2 = span >= 5;
+                //var b3 = span % 2 == 0;
+                return b1;
             }).ToList();
 
-            PrintHelper.PrintForecastResult(string.Format("经和值尾过滤后余{0}组", nums.Count()));
+            PrintHelper.PrintForecastResult(string.Format("经跨度过滤后余{0}组", nums.Count()));
             return nums;
         }
 
         /// <summary>
-        /// 跨度过滤
+        /// 和值尾过滤。注意：每次需要修改条件
         /// </summary>
         /// <param name="data"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static IList<int[]> FilterBySpan(IList<int[]> data, int[] values)
+        public static IList<int[]> FilterBySumMantissa(IList<int[]> data)
         {
             var nums = data.Where(g =>
             {
-                return values.Any(v => g.Max() - g.Min() == v);
+                var sumMantissa = g.Sum() % 10;
+                var b1 = sumMantissa % 3 == 0 || sumMantissa % 3 == 1;
+                //var b2 = sumMantissa % 2 == 1;
+                var b3 = sumMantissa <= 4;
+                return b1;
             }).ToList();
 
-            PrintHelper.PrintForecastResult(string.Format("经跨度过滤后余{0}组", nums.Count()));
+            PrintHelper.PrintForecastResult(string.Format("经和值尾过滤后余{0}组", nums.Count()));
             return nums;
         }
 

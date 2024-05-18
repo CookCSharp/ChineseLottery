@@ -148,10 +148,10 @@ namespace UnionLotto
 
                 //SelectHelper.CalculateColdHotWarm();
 
-                SelectHelper.CalculateExcludeBlueLotto();
+                //SelectHelper.CalculateExcludeBlueLotto();
                 //SelectHelper.CalculateBlueWithRedSubtract();
 
-                //Forecast.GuessCurrentPeriodLotto();
+                Forecast.GuessCurrentPeriodLotto();
             }
         }
     }

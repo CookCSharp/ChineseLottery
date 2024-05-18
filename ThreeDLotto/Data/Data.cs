@@ -21,17 +21,17 @@ namespace ThreeDLotto
         /// <summary>
         /// 上期开奖号码
         /// </summary>
-        public static int[] PreLotto = new int[3] { 0, 9, 9 };
+        public static int[] PreLotto = [5, 7, 3];
 
         /// <summary>
         /// 下期开奖期数
         /// </summary>
-        public const int CurrentPeriod = 116;
+        public const int CurrentPeriod = 129;
 
         /// <summary>
         /// 所有号码
         /// </summary>
-        public static int[] AllLotto = new int[10] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        public static int[] AllLotto = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         public static void SetLotto(IEnumerable<int> lotto) => PreLotto = lotto.ToArray();
     }
