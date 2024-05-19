@@ -27,26 +27,21 @@ namespace ThreeDLotto
 
             //data = new List<int[]>()
             //{
-            //    //new int[] { 2, 4, 2 },
-            //    //new int[] { 0, 7, 5 },
-            //    //new int[] { 0, 9, 9 },
-            //    //new int[] { 8, 5, 1 },
-            //    //new int[] { 9, 8, 9 },
-            //    new int[] { 3, 4, 3 },
+            //    new int[] { 0, 6, 7 },
             //};
 
             //上期开组三时使用
             //data = FilterHelper.FilterByGroupThreePreLotto(data);
 
-            //data = FilterHelper.FilterByDistance5(data, [0, 1, 2]);
+            //data = FilterHelper.FilterByDistance5(data, [1, 2, 3]);
             //data = FilterHelper.FilterByPreLotto(data, [0, 1, 2]);
 
-            data = FilterHelper.FilterByHundreds012Path(data, [0, 1]); //不为4、6
-            data = FilterHelper.FilterByTens012Path(data, [0, 2]);
-            data = FilterHelper.FilterByUnits012Path(data, [0, 2]); //不为2、9
-            data = FilterHelper.FilterByHundredsValue(data, [0, 3, 6, 9]);
-            data = FilterHelper.FilterByTensValue(data, [0, 2, 3]);
-            data = FilterHelper.FilterByUnitsValue(data, [0, 2, 3]);
+            //data = FilterHelper.FilterByHundreds012Path(data, [0, 2]);
+            //data = FilterHelper.FilterByTens012Path(data, [0, 1]);
+            data = FilterHelper.FilterByUnits012Path(data, [0, 2]);
+            data = FilterHelper.FilterByHundredsValue(data, [0, 2, 3, 5]);
+            data = FilterHelper.FilterByTensValue(data, [1, 2, 6, 7]);
+            //data = FilterHelper.FilterByUnitsValue(data, [0, 2, 3]);
 
             //data = FilterHelper.FilterByMax012Path(data, [1, 2]);
             //data = FilterHelper.FilterByMin012Path(data, [1, 2]);

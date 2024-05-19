@@ -187,7 +187,7 @@ namespace ThreeDLotto
             {
                 var sum = g.Sum();
                 var b1 = sum >= 5 && sum <= 23;
-                var b2 = sum % 3 == 0 || sum % 3 == 1;
+                var b2 = sum % 3 == 2;
                 //var b3 = sum % 2 == 1;
                 return b1 && b2;
             }).ToList();
@@ -207,7 +207,7 @@ namespace ThreeDLotto
             var nums = data.Where(g =>
             {
                 var span = g.Max() - g.Min();
-                var b1 = span % 3 == 1 || span % 3 == 2;
+                var b1 = span % 3 == 0 || span % 3 == 1;
                 //var b2 = span >= 5;
                 //var b3 = span % 2 == 0;
                 return b1;
@@ -228,10 +228,10 @@ namespace ThreeDLotto
             var nums = data.Where(g =>
             {
                 var sumMantissa = g.Sum() % 10;
-                var b1 = sumMantissa % 3 == 0 || sumMantissa % 3 == 1;
-                //var b2 = sumMantissa % 2 == 1;
-                var b3 = sumMantissa <= 4;
-                return b1;
+                var b1 = sumMantissa % 3 == 0 || sumMantissa % 3 == 1;               
+                var b2 = sumMantissa >= 5;
+                //var b3 = sumMantissa % 2 == 1;
+                return b1 && b2;
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经和值尾过滤后余{0}组", nums.Count()));
