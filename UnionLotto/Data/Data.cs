@@ -25,12 +25,12 @@ namespace UnionLotto
         /// <summary>
         /// 上期开奖号码
         /// </summary>
-        public static int[] PreRedBlueLotto = new int[7] { 12, 15, 17, 23, 26, 32, 11 }; //12, 15, 17, 23, 26, 32, 11
+        public static int[] PreRedBlueLotto = [2, 4, 6, 7, 16, 29, 3]; // 2, 4, 6, 7, 16, 29, 3
 
         /// <summary>
         /// 下期开奖期数
         /// </summary>
-        public const int CurrentPeriod = 50; //打印信息和篮球排除所用
+        public const int CurrentPeriod = 56; //打印信息和篮球排除所用
 
         /// <summary>
         /// 每期开奖必有红色号码

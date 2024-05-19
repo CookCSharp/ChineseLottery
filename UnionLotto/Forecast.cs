@@ -119,14 +119,10 @@ namespace UnionLotto
 
             //data = new List<int[]>
             //{
-            //    new int[] { 05, 06 ,13, 23, 24, 25},
-            //    new int[] { 2, 6, 10, 11, 17, 29},
-            //    new int[] { 7, 8, 21, 26, 29, 30},
-            //    new int[] { 2, 9, 15, 19, 26, 28},
-            //    new int[] { 12, 15, 17, 23,26, 32},
+            //    new int[] { 1, 3, 7, 10, 22, 33},
             //};
 
-#if COMMON
+#if !COMMON
             data = FilterHelper.FilterByOddEven(data, [3D / 3, 2D / 4, 4D / 2, 1D / 5, 5D / 1]);
             data = FilterHelper.FilterBySize(data, [3D / 3, 2D / 4, 4D / 2, 5D / 1, 1D / 5]);
             data = FilterHelper.FilterByPrimeComposite(data, [2D / 4, 1D / 5, 3D / 3, 4D / 2]);
@@ -174,13 +170,13 @@ namespace UnionLotto
             //data = FilterHelper.FilterBy012Path(data, [6, 5]); 
             //data = FilterHelper.FilterBySumRegion(data, 123); 
             //data = FilterHelper.FilterByAverage(data); 
-            data = FilterHelper.FilterByMantissaSum(data); 
-            data = FilterHelper.FilterBySumMantissa(data, [0]);
-            //data = FilterHelper.FilterByAdjacentNumber(data, 0);
-            //data = FilterHelper.FilterByACValue(data, [6, 9]);
-            //Console.WriteLine();
+            data = FilterHelper.FilterByMantissaSum(data);
+            data = FilterHelper.FilterBySumMantissa(data, [9]);
+            //data = FilterHelper.FilterByAdjacentNumber(data, 3);
+            data = FilterHelper.FilterByACValue(data, [4, 6, 9, 10]);
+            Console.WriteLine();
 
-            //data = FilterHelper.FilterBySumOf16(data); //质数，2路，质合合合...看趋势，质质合质与质质合合交叉进行
+            //data = FilterHelper.FilterBySumOf16(data);
             //data = FilterHelper.FilterBySumOf25(data);  
             //data = FilterHelper.FilterBySumOf34(data);  
             data = FilterHelper.FilterBySpanOf16(data);
@@ -192,35 +188,43 @@ namespace UnionLotto
 
 
             //奇偶过滤
-            data = FilterHelper.FilterByFirstOddEven(data, 0);
-            data = FilterHelper.FilterBySecondOddEven(data, 0);
+            //data = FilterHelper.FilterByFirstOddEven(data, 1);
+            //data = FilterHelper.FilterBySecondOddEven(data, 1);
             //data = FilterHelper.FilterByThirdOddEven(data, 0);
-            data = FilterHelper.FilterByFourthOddEven(data, 1);
-            data = FilterHelper.FilterByFifthOddEven(data, 0);
-            data = FilterHelper.FilterBySixthOddEven(data, 1);
+            //data = FilterHelper.FilterByFourthOddEven(data, 0);
+            //data = FilterHelper.FilterByFifthOddEven(data, 0);
+            //data = FilterHelper.FilterBySixthOddEven(data, 1);
 
             //质合过滤
-            //data = FilterHelper.FilterByAnyPrimeComposite(data, 1, 0);
-            data = FilterHelper.FilterByAnyPrimeComposite(data, 3, 0);
-            data = FilterHelper.FilterByAnyPrimeComposite(data, 4, 0);
-            //data = FilterHelper.FilterByAnyPrimeComposite(data, 6, 0); //不确定
+            data = FilterHelper.FilterByAnyPrimeComposite(data, 1, 1);
+            data = FilterHelper.FilterByAnyPrimeComposite(data, 2, 0);
+            //data = FilterHelper.FilterByAnyPrimeComposite(data, 3, 1);
+            //data = FilterHelper.FilterByAnyPrimeComposite(data, 4, 0);
+            //data = FilterHelper.FilterByAnyPrimeComposite(data, 6, 0);
 
             //012路过滤
             data = FilterHelper.FilterByFirst012Path(data, [0, 1]);
-            data = FilterHelper.FilterBySecond012Path(data, [1, 2]);
-            data = FilterHelper.FilterByThird012Path(data, [0, 2]);
-            data = FilterHelper.FilterByFourth012Path(data, [1, 2]);
-            data = FilterHelper.FilterByFifth012Path(data, [0, 1]);
-            data = FilterHelper.FilterBySixth012Path(data, [1, 2]);
+            data = FilterHelper.FilterBySecond012Path(data, [0, 2]);
+            data = FilterHelper.FilterByThird012Path(data, [1, 2]);
+            data = FilterHelper.FilterByFourth012Path(data, [0, 2]);
+            data = FilterHelper.FilterByFifth012Path(data, [1]); //12
+            data = FilterHelper.FilterBySixth012Path(data, [0, 2]);
             Console.WriteLine();
 
             //升平降过滤
-            data = FilterHelper.FilterByAnyValue(data, 1, 12, -1);
-            data = FilterHelper.FilterByAnyValue(data, 2, 15, -1);
-            //data = FilterHelper.FilterByAnyValue(data, 3, 17, -1); //不确定
-            //data = FilterHelper.FilterByAnyValue(data, 4, 23, -1); //不确定
-            data = FilterHelper.FilterByAnyValue(data, 5, 26, -11);
-            data = FilterHelper.FilterByAnyValue(data, 6, 32, -10);
+            data = FilterHelper.FilterByAnyValue(data, 1, 2, 1);
+            data = FilterHelper.FilterByAnyValue(data, 2, 4, 1);
+            data = FilterHelper.FilterByAnyValue(data, 3, 6, 1);
+            data = FilterHelper.FilterByAnyValue(data, 4, 7, 1);
+            data = FilterHelper.FilterByAnyValue(data, 5, 16, 1);
+            data = FilterHelper.FilterByAnyValue(data, 6, 29, -1);
+
+            //1号球 质数、01路、升
+            //2号球 合数、02路、升
+            //3号球 12路、升
+            //4号球 02路、升
+            //5号球 1路、升
+            //6号球 02路、降
 
             //data = FilterHelper.FilterByPassword(data, [42]);
             //data = FilterHelper.FilterByCompositeNumber(data);

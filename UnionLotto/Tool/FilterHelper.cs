@@ -444,8 +444,8 @@ namespace UnionLotto
                 var mantissaSum = g.Select(n => n % 10).Sum();
 
                 //mantissaSum >= 12 && mantissaSum <= 40 &&
-                return mantissaSum >= 12 && mantissaSum <= 36 && mantissaSum % 2 == 0;
-                       //(mantissaSum % 3 == 1 || mantissaSum % 3 == 2);
+                return mantissaSum >= 12 && mantissaSum <= 36 && mantissaSum % 2 == 1 &&
+                       (mantissaSum % 3 == 0 || mantissaSum % 3 == 1);
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经尾数和值过滤后余{0}组", nums.Count()));
@@ -540,7 +540,8 @@ namespace UnionLotto
             var nums = data.Where(g =>
             {
                 var span = g[^1] - g[0];
-                return (span >= 11 && span <= 32) && (span % 3 == 0 || span % 3 == 1);
+                var b1 = Enumerable.Range(2, (int)Math.Sqrt(span)).Any(v => span % v != 0);
+                return span >= 11 && span <= 32 && (span % 3 == 0 || span % 3 == 1) && b1;
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经跨度过滤后余{0}组", nums.Count()));

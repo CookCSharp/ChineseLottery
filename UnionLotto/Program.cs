@@ -110,27 +110,29 @@ namespace UnionLotto
                 {
                     //FindHelper.FindOddEven(1, [0, 0, 0, 0, 0, 1, 0, 0]);
                     //FindHelper.FindPrimeComposite(1, [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0]);
-                    //FindHelper.Find012Path(1, [2, 2, 2, 1, 2, 0]);
+                    //FindHelper.Find012Path(1, [0, 1, 2, 1, 1, 2, 2]);
 
                     //FindHelper.FindOddEven(2, [1, 0, 0, 0, 0, 0, 0, 1, 1,1]);
                     //FindHelper.FindPrimeComposite(2, [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0]);
-                    //FindHelper.Find012Path(2, [0, 0, 2, 0, 2, 0, 0]);
+                    //FindHelper.Find012Path(2, [0, 0, 0, 1, 2, 1, 1]);
 
                     //FindHelper.FindOddEven(3, [1, 0, 0, 0, 0, 0, 0, 1, 1,1]);
                     //FindHelper.FindPrimeComposite(3, [0,0,1, 1, 1, 1, 0, 0, 0, 1]);
-                    //FindHelper.Find012Path(3, [ 2, 1, 1, 0, 0, 2]);
+                    //FindHelper.Find012Path(3, [2, 1, 1, 2, 0, 2, 0]);
 
                     //FindHelper.FindOddEven(4, [0, 0, 0, 1, 1, 1, 0, 1, 1]);
                     //FindHelper.FindPrimeComposite(4, [0, 0, 0, 0, 1, 1, 0, 1, 1, 0]);
-                    //FindHelper.Find012Path(4, [1, 2, 2, 2, 1, 2]);
+                    //FindHelper.Find012Path(4, [2, 1, 2, 0, 1, 1, 1]);
 
                     //FindHelper.FindOddEven(5, [1, 1, 0, 1, 0, 0, 1, 1, 0, 0]);
                     //FindHelper.FindPrimeComposite(5, [0, 0, 0, 0, 1, 1, 0, 1, 1, 0]);
-                    //FindHelper.Find012Path(5, [0, 2, 2, 2, 2, 0]);
+                    //FindHelper.Find012Path(5, [2, 2, 1, 2, 2, 1, 1, 1]);
 
                     //FindHelper.FindOddEven(6, [0, 1, 0, 1, 0, 0, 0]);
                     //FindHelper.FindPrimeComposite(6, [1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]);
-                    //FindHelper.Find012Path(6, [2, 2, 0, 1, 2, 1]);
+                    //FindHelper.Find012Path(6, [0, 1, 0, 0, 2, 2, 1]);
+
+                    //FindHelper.Find012Path(7, [0, 0, 1, 0, 0, 2]);
                 }
 
                 //SelectHelper.CalculatePlusAndSubtractLotto();
