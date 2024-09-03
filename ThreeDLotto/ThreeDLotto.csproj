@@ -15,6 +15,7 @@
 	<None Update="Assets\History.json">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
+	<None Remove="Assets\预测.txt" />
   </ItemGroup>
 
 </Project>

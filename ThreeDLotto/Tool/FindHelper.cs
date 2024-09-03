@@ -177,7 +177,7 @@ namespace ThreeDLotto
 
             History.Instance.GetData(PeriodIndex, out var historyData);
 
-            var path012 = historyData.Values.Select(group => SelectHelper.CaculateMiddleNumber(group.ToArray()) % 3).ToList();
+            var path012 = historyData.Values.Select(group => SelectHelper.CalculateMiddleNumber(group.ToArray()) % 3).ToList();
             IsSubset(path012, values.ToList(), out List<int> periodIndexes);
 
             PrintHelper.PrintForecastResult(string.Format("满足中间值012路规律：{0} 的有以下几期", string.Join(" ", values)));
@@ -225,6 +225,32 @@ namespace ThreeDLotto
             IsSubset(path012, values.ToList(), out List<int> periodIndexes);
 
             PrintHelper.PrintForecastResult(string.Format("满足和值奇偶规律：{0} 的有以下几期", string.Join(" ", values)));
+            PrintHelper.PrintForecastResult(string.Join(" ", periodIndexes.Select(x => $"{historyData.ElementAt(x).Key}期")));
+        }
+
+        /// <summary>
+        /// 根据给出的和值大小找出历史相同的规律
+        /// </summary>
+        /// <remarks>
+        /// 规定1为大，0为小
+        /// </remarks>
+        /// <param name="values"></param>
+        public static void FindSumBigSmall(int[] values)
+        {
+            Wait();
+
+            History.Instance.GetData(PeriodIndex, out var historyData);
+
+            var path012 = historyData.Values.Select(group =>
+            {
+                if (group.Sum() >= 14)
+                    return 1;
+                else
+                    return 0;
+            }).ToList();
+            IsSubset(path012, values.ToList(), out List<int> periodIndexes);
+
+            PrintHelper.PrintForecastResult(string.Format("满足和值大小规律：{0} 的有以下几期", string.Join(" ", values)));
             PrintHelper.PrintForecastResult(string.Join(" ", periodIndexes.Select(x => $"{historyData.ElementAt(x).Key}期")));
         }
 
