@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-<!--        会影响顶级语句-->
+        <!--        会影响顶级语句-->
         <OutputType>Exe</OutputType>
         <LangVersion>latest</LangVersion>
         <TargetFramework>net8.0</TargetFramework>
@@ -10,17 +10,36 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Update="Assets\History-Supper.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Assets\History-ThreePermutation.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="Assets\history_supper.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\history_threepermutation.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ThreeD\" />
-      <Folder Include="UnionLotto\" />
+        <Folder Include="ThreeD\"/>
+        <Folder Include="UnionLotto\"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.ML" Version="4.0.0-preview.24378.1"/>
+        <PackageReference Include="Microsoft.ML.TimeSeries" Version="4.0.0-preview.24378.1"/>
+        <PackageReference Include="PLplot" Version="5.13.7"/>
+        <PackageReference Include="CsvHelper" Version="19.0.0"/>
+        <PackageReference Include="TensorFlow.Keras" Version="0.15.0" />
+        <PackageReference Include="TensorFlow.NET" Version="0.150.0"/>
+        <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.16.0"/>
+    </ItemGroup>
+
+    <Target Name="CopyFiles" AfterTargets="Build">
+        <ItemGroup>
+            <PlotFiles Include="$(TargetDir)runtimes\win-x64\native\**\*.*"/>
+        </ItemGroup>
+        <Message Text="Executing AfterBuild copy files task" Importance="High"/>
+        <Copy SourceFiles="@(PlotFiles)" DestinationFolder="$(TargetDir)%(RecursiveDir)" ContinueOnError="true"/>
+        <Message Text="AfterBuild copy files task completed" Importance="High"/>
+    </Target>
 
 </Project>

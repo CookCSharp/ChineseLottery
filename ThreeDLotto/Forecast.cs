@@ -96,21 +96,21 @@ public class Forecast
 
 
         // 排3
-        // data = FilterHelper.FilterByHundredsValue(data, [0,2,8,9]);
-        // data = FilterHelper.FilterByTensValue(data, [0,1,2]);
-        // data = FilterHelper.FilterByUnitsValue(data, [6,7,8,9]);
-        // Console.WriteLine();
+        // data = FilterHelper.FilterByHundredsValue(data, [5,7]);
+        // data = FilterHelper.FilterByTensValue(data, [6,9,7,8]);
+        // data = FilterHelper.FilterByUnitsValue(data, [2,6]);
+        Console.WriteLine();
         data = FilterHelper.FilterBySum(data);
         // data = FilterHelper.FilterBySumValue(data,[1,4,5,8,16,0,9,15]);
-        // data = FilterHelper.FilterBySpanValue(data, [0,1,2,7,8,9]);
-        data = FilterHelper.FilterBySumMantissaValue(data, [0,1,3,4,6,7,9]);
+        data = FilterHelper.FilterBySpanValue(data, [3,7, ]);
+        data = FilterHelper.FilterBySumMantissaValue(data, [0,3,6, ]);
 
-        data = FilterHelper.FilterBySumOf12(data);
-        data = FilterHelper.FilterBySumOf13(data);
-        data = FilterHelper.FilterBySumOf23(data); //\\
+        // data = FilterHelper.FilterBySumOf12(data);
+        // data = FilterHelper.FilterBySumOf13(data);
+        // data = FilterHelper.FilterBySumOf23(data);
         // data = FilterHelper.FilterBySpanOf12(data);
-        data = FilterHelper.FilterBySpanOf13(data);
-        data = FilterHelper.FilterBySpanOf23(data);
+        // data = FilterHelper.FilterBySpanOf13(data);
+        // data = FilterHelper.FilterBySpanOf23(data);
 
         data.ToList().ForEach(group => PrintHelper.PrintForecastResult(string.Join(" ", group)));
     }

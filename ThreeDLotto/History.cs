@@ -100,14 +100,8 @@ namespace ThreeDLotto
 
         public void GetData(int pageSize, out Dictionary<string, IList<int>> historyData)
         {
-            if (!_isStartGuess)
-            {
-                historyData = new Dictionary<string, IList<int>>(HistoryData.Take(pageSize).Reverse());
-            }
-            else
-            {
-                historyData = new Dictionary<string, IList<int>>(HistoryData.Skip(1).Take(pageSize).Reverse());
-            }
+            historyData = !_isStartGuess ? new Dictionary<string, IList<int>>(HistoryData.Take(pageSize).Reverse()) 
+                : new Dictionary<string, IList<int>>(HistoryData.Skip(1).Take(pageSize).Reverse());
         }
     }
 }

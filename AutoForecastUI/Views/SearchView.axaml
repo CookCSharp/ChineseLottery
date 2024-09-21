@@ -1,0 +1,87 @@
+<UserControl x:Class="AutoForecastUI.Views.SearchView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:b="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:AutoForecastUI.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             x:DataType="vm:SearchViewModel">
+
+    <UserControl.DataContext>
+        <vm:SearchViewModel />
+    </UserControl.DataContext>
+
+    <i:Interaction.Behaviors>
+        <b:EventTriggerBehavior EventName="Loaded">
+            <b:CallMethodAction MethodName="OnLoaded" TargetObject="{Binding}" />
+        </b:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <Grid Margin="10" ColumnDefinitions="*, 260" RowDefinitions="Auto,Auto,Auto,*">
+        <StackPanel Orientation="Horizontal">
+            <HeaderedContentControl Header="规律数组长度">
+                <HeaderedContentControl.Content>
+                    <NumericUpDown Value="15" Minimum="1" Maximum="15" />
+                </HeaderedContentControl.Content>
+            </HeaderedContentControl>
+            <HeaderedContentControl Header="最小周期数">
+                <HeaderedContentControl.Content>
+                    <NumericUpDown Value="{Binding MinPeriodCount}" Minimum="1" Maximum="10" />
+                </HeaderedContentControl.Content>
+            </HeaderedContentControl>
+            <StackPanel Margin="20,18,0,0" Orientation="Horizontal">
+                <Button Content="Sure" Command="{Binding SureCommand}" />
+                <Button Content="Query" Command="{Binding QueryCommand}" Margin="20,0" />
+                <Button Content="Cancel" Command="{Binding QueryCancelCommand}" IsVisible="False" />
+                <Button Content="UpdateHistoryData" Command="{Binding UpdateCommand}" IsVisible="False" />
+            </StackPanel>
+        </StackPanel>
+
+        <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding SingleFeatures}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Width="150" Margin="0,10,20,0">
+                        <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                        <TextBlock Text="ValuePath012" />
+                        <TextBlock Text="MantissaValuePath012" Margin="0,10" />
+                        <TextBlock Text="MantissaLMS" />
+                        <TextBlock Text="AmplitudePath012" Margin="0,10,0,0" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ItemsControl Grid.Row="2" Grid.Column="0" ItemsSource="{Binding SumFeatures}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Width="150" Margin="0,10,20,0">
+                        <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                        <TextBlock Text="SumPath012" />
+                        <TextBlock Text="SumMantissaPath012" Margin="0,10" />
+                        <TextBlock Text="SumMantissaLMS" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <TextBlock Grid.Row="0" Grid.Column="1"
+                   Grid.RowSpan="4"
+                   Text="{Binding Result}"
+                   Margin="0,20,0,0"
+                   TextWrapping="WrapWithOverflow" />
+    </Grid>
+</UserControl>

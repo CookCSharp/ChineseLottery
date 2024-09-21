@@ -14,7 +14,7 @@ def update_three_permutation():
         all_data += data
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    filename = os.path.join(current_dir, "History-ThreePermutation.json")
+    filename = os.path.join(current_dir, "history_threepermutation.json")
     with open(filename, "w", encoding="utf-8") as file:
         json.dump(all_data, file, indent=4, ensure_ascii=False)
 
@@ -29,7 +29,7 @@ def update_supper():
         all_data += data
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    filename = os.path.join(current_dir, "History-Supper.json")
+    filename = os.path.join(current_dir, "history_supper.json")
     with open(filename, "w", encoding="utf-8") as file:
         json.dump(all_data, file, indent=4, ensure_ascii=False)
 

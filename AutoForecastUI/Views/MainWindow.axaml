@@ -1,0 +1,41 @@
+<Window x:Class="AutoForecastUI.Views.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:b="using:Avalonia.Xaml.Interactions.Core"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:AutoForecastUI.ViewModels"
+        mc:Ignorable="d"
+        d:DesignHeight="450"
+        d:DesignWidth="800"
+        Title="AutoForecastUI"
+        Width="1300"
+        Height="600"
+        CanResize="False"
+        Icon="/Assets/avalonia-logo.ico"
+        WindowStartupLocation="CenterScreen"
+        x:DataType="vm:MainWindowViewModel">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel />
+    </Window.DataContext>
+
+    <i:Interaction.Behaviors>
+        <b:EventTriggerBehavior EventName="Loaded">
+            <b:CallMethodAction MethodName="OnLoaded" TargetObject="{Binding}" />
+        </b:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <Grid ColumnDefinitions="160, *">
+        <ListBox ItemsSource="{Binding Views}" SelectedIndex="{Binding SelectedViewIndex}">
+            <i:Interaction.Behaviors>
+                <b:EventTriggerBehavior EventName="SelectionChanged">
+                    <b:InvokeCommandAction Command="{Binding SelectViewCommand}" />
+                </b:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+        </ListBox>
+        <UserControl Grid.Column="1" Content="{Binding View}" />
+    </Grid>
+
+</Window>

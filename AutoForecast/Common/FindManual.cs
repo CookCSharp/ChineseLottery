@@ -25,7 +25,7 @@ public static class FindManual
 
     public static async void ResolveJsonFile(LottoType lottoType = LottoType.Supper)
     {
-        await using var fs = new FileStream(AppDomain.CurrentDomain.BaseDirectory + $"Assets\\History-{lottoType}.json", FileMode.Open);
+        await using var fs = new FileStream(AppDomain.CurrentDomain.BaseDirectory + $"Assets\\history_{lottoType.ToString().ToLower()}.json", FileMode.Open);
         using var sw = new StreamReader(fs);
         var resultJson = await sw.ReadToEndAsync();
         var dataList = JsonNode.Parse(resultJson)!.AsArray();
@@ -40,6 +40,8 @@ public static class FindManual
         SemaphoreSlimInstance.Release();
     }
 
+    public static Dictionary<string, IList<int>> GetHistoryData() => HistoryData;
+    
     public static void Wait() => SemaphoreSlimInstance.Wait();
     
     private static void FindValue012Path(this Dictionary<string, IList<int>> historyData, int index, int[] values)

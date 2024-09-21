@@ -10,8 +10,12 @@ namespace AutoForecast;
 
 public static class FindExtensions
 {
-    private const int RegularLength = 10; //规律数组长度
-    private const int MinPeriodCount = 5; //找到满足条件的最小周期数量
+    private const int RegularLength = 15; //规律数组长度
+    // private const int MinPeriodCount = 3; //找到满足条件的最小周期数量
+
+    private static int MinPeriodCount = 3; //找到满足条件的最小周期数量 
+
+    public static void SetMinPeriodCount(int period) => MinPeriodCount = period;
 
     public static Dictionary<string, IList<int>> FindValue012Path(this Dictionary<string, IList<int>> historyData, int index)
     {
@@ -31,6 +35,17 @@ public static class FindExtensions
         PrintHelper.PrintResult($"满足第{index}位尾数012路规律：{string.Join(" ", values)} 的有以下几期");
         PrintHelper.PrintResult(string.Join(" ", periods.Select(x => $"{historyData.ElementAt(x).Key}期")));
         PrintHelper.PrintForecastResult($"预测第{index}位下期尾数012路为：" + string.Join(" ", periods.Where(x => x + values.Count < historyData.Count).Select(x => historyData.ElementAt(x + values.Count).Value[index - 1] % 10 % 3)));
+
+        return historyData;
+    }
+
+    public static Dictionary<string, IList<int>> FindValueMantissaLargeMediumSmall(this Dictionary<string, IList<int>> historyData, int index)
+    {
+        historyData.AutoFind(g => (g[index - 1] % 10).ToLargeMediumSmallConverterValue(), out var values, out var periods);
+
+        PrintHelper.PrintResult($"满足第{index}位尾数大中小规律：{string.Join(" ", values.ToLargeMediumSmallDescription())} 的有以下几期");
+        PrintHelper.PrintResult(string.Join(" ", periods.Select(x => $"{historyData.ElementAt(x).Key}期")));
+        PrintHelper.PrintForecastResult($"预测第{index}位下期尾数大中小为：" + string.Join(" ", periods.Where(x => x + values.Count < historyData.Count).Select(x => (historyData.ElementAt(x + values.Count).Value[index - 1] % 10).ToLargeMediumSmallDescription())));
 
         return historyData;
     }
@@ -57,6 +72,17 @@ public static class FindExtensions
         return historyData;
     }
 
+    public static Dictionary<string, IList<int>> FindSumValueMantissaLargeMediumSmall(this Dictionary<string, IList<int>> historyData, int first, int second)
+    {
+        historyData.AutoFind(g => ((g[first - 1] + g[second - 1]) % 10).ToLargeMediumSmallConverterValue(), out var values, out var periods);
+
+        PrintHelper.PrintResult($"满足{first}、{second}和值尾大中小规律：{string.Join(" ", values.ToLargeMediumSmallDescription())} 的有以下几期");
+        PrintHelper.PrintResult(string.Join(" ", periods.Select(x => $"{historyData.ElementAt(x).Key}期")));
+        PrintHelper.PrintForecastResult($"预测{first}、{second}和值尾下期值大中小为：" + string.Join(" ", periods.Where(x => x + values.Count < historyData.Count).Select(x => ((historyData.ElementAt(x + values.Count).Value[first - 1] + historyData.ElementAt(x + values.Count).Value[second - 1]) % 10).ToLargeMediumSmallDescription())));
+
+        return historyData;
+    }
+
     public static Dictionary<string, IList<int>> FindSpanValue012Path(this Dictionary<string, IList<int>> historyData, int first, int second)
     {
         historyData.AutoFind(g => Math.Abs(g[second - 1] - g[first - 1]) % 3, out var values, out var periods);
@@ -75,6 +101,17 @@ public static class FindExtensions
         PrintHelper.PrintResult($"满足第{first}、{second}位差值尾012路规律：{string.Join(" ", values)} 的有以下几期");
         PrintHelper.PrintResult(string.Join(" ", periods.Select(x => $"{historyData.ElementAt(x).Key}期")));
         PrintHelper.PrintForecastResult($"预测第{first}、{second}位下期差值尾012路为：" + string.Join(" ", periods.Where(x => x + values.Count < historyData.Count).Select(x => Math.Abs(historyData.ElementAt(x + values.Count).Value[second - 1] - historyData.ElementAt(x + values.Count).Value[first - 1]) % 10 % 3)));
+
+        return historyData;
+    }
+
+    public static Dictionary<string, IList<int>> FindSpanValueMantissaLargeMediumSmall(this Dictionary<string, IList<int>> historyData, int first, int second)
+    {
+        historyData.AutoFind(g => (Math.Abs(g[second - 1] - g[first - 1]) % 10).ToLargeMediumSmallConverterValue(), out var values, out var periods);
+
+        PrintHelper.PrintResult($"满足{first}、{second}差值尾大中小规律：{string.Join(" ", values.ToLargeMediumSmallDescription())} 的有以下几期");
+        PrintHelper.PrintResult(string.Join(" ", periods.Select(x => $"{historyData.ElementAt(x).Key}期")));
+        PrintHelper.PrintForecastResult($"预测{first}、{second}差值尾下期值大中小为：" + string.Join(" ", periods.Where(x => x + values.Count < historyData.Count).Select(x => (Math.Abs(historyData.ElementAt(x + values.Count).Value[second - 1] - historyData.ElementAt(x + values.Count).Value[first - 1]) % 10).ToLargeMediumSmallDescription())));
 
         return historyData;
     }
@@ -182,6 +219,8 @@ public static class FindExtensions
             values = data.Take(length).Select(func).Reverse().ToList();
             find = IsSubset(path012, values, out periods);
             length -= 1;
+
+            // if (length <= 0) break;
         }
     }
 
@@ -200,6 +239,12 @@ public static class FindExtensions
             find = IsSubset(path012, values, out periods);
             length -= 1;
         }
+    }
+
+    public static void ManualFindValue012Path(this Dictionary<string, IList<int>> historyData, int index, int[] values, out List<int> periods)
+    {
+        var path012 = historyData.Values.Select(g => g[index - 1] % 3).ToList();
+        IsSubset(path012, values.ToList(), out periods);
     }
 
     private static bool IsSubset(List<int> list1, List<int> list2, out List<int> periods)

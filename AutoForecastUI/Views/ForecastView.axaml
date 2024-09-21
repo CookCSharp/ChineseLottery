@@ -1,0 +1,45 @@
+<UserControl x:Class="AutoForecastUI.Views.ForecastView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:b="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:AutoForecastUI.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             x:DataType="vm:ForecastViewModel">
+
+    <UserControl.DataContext>
+        <vm:ForecastViewModel />
+    </UserControl.DataContext>
+
+    <i:Interaction.Behaviors>
+        <b:EventTriggerBehavior EventName="Loaded">
+            <b:CallMethodAction MethodName="OnLoaded" TargetObject="{Binding}" />
+        </b:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <Grid ColumnDefinitions="*,300">
+        <DataGrid Grid.Column="0"
+                  AutoGenerateColumns="False" CanUserResizeColumns="True"
+                  ItemsSource="{Binding ForecastFeatures}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="位数" Binding="{Binding LottoFeature}" />
+                <DataGridTextColumn Header="012路" Binding="{Binding Path012}" />
+                <DataGridTextColumn Header="尾数值" Binding="{Binding MantissaValue}" />
+                <DataGridTextColumn Header="振幅012路" Binding="{Binding AmplitudePath012}" />
+                <DataGridTextColumn Header="其它" Binding="{Binding Other}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="{Binding LastLotto, StringFormat={}上期开奖号码: {0}}" />
+            <Button Content="Save"
+                    Command="{Binding SaveCommand}"
+                    Margin="0,10"
+                    HorizontalAlignment="Center" />
+        </StackPanel>
+    </Grid>
+
+</UserControl>

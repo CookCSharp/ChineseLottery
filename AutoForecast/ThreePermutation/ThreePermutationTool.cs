@@ -10,9 +10,9 @@ namespace AutoForecast;
 
 public static class ThreePermutationTool
 {
-    public static int[] GetSingle(int[] way012, int[] size)
+    public static int[] GetSingle(int[] path012, int[] size)
     {
-        return Tool.GetSingleLessThanTen(way012, size);
+        return Tool.GetSingleLessThanTen(path012, size);
     }
 
     public static List<int[]> SumValue012PathFilter(this List<int[]> data, int[] path012)

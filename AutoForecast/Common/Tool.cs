@@ -18,19 +18,19 @@ public static class Tool
     private static readonly int[] Blues = Enumerable.Range(1, 16).ToArray();
 #endif
 
-    public static int[] GetRed(int[] mantissaValues, int[] way012)
+    public static int[] GetRed(int[] mantissaValues, int[] path012)
     {
-        return Reds.FilterByMantissaValue(mantissaValues).FilterByValue012(way012);
+        return Reds.FilterByMantissaValue(mantissaValues).FilterByValue012(path012);
     }
 
-    public static int[] GetBlue(int[] mantissaValues, int[] way012)
+    public static int[] GetBlue(int[] mantissaValues, int[] path012)
     {
-        return Blues.FilterByMantissaValue(mantissaValues).FilterByValue012(way012);
+        return Blues.FilterByMantissaValue(mantissaValues).FilterByValue012(path012);
     }
 
-    public static int[] GetSingleLessThanTen(int[] way012, int[] size)
+    public static int[] GetSingleLessThanTen(int[] path012, int[] size)
     {
-        return Enumerable.Range(0, 10).ToArray().FilterByValue012(way012).FilterByLargeMediumSmallValue(size);
+        return Enumerable.Range(0, 10).ToArray().FilterByValue012(path012).FilterByLargeMediumSmallValue(size);
     }
 
     public static List<int[]> FindAllSortedCombinations(int[] first, int[] second, int[] third)
@@ -173,9 +173,9 @@ public static class Tool
     private static int[] FilterByMantissaValue(this int[] values, int[] mantissaValues)
         => values.Where(n => mantissaValues.Contains(n % 10)).ToArray();
 
-    private static int[] FilterByValue012(this int[] values, int[] way012)
-        => values.Where(n => way012.Contains(n % 3)).ToArray();
+    private static int[] FilterByValue012(this int[] values, int[] path012)
+        => values.Where(n => path012.Contains(n % 3)).ToArray();
 
     private static int[] FilterByLargeMediumSmallValue(this int[] values, int[] size)
-        => values.Where(n => size.Contains(n)).ToArray();
+        => values.Where(size.Contains).ToArray();
 }

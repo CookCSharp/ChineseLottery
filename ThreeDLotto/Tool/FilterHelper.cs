@@ -422,7 +422,7 @@ namespace ThreeDLotto
             var nums = data.Where(g =>
             {
                 var sum = g.Sum();
-                var b1 = sum % 3 == 0 || sum % 3 == 0;
+                var b1 = sum % 3 == 1 || sum % 3 == 1;
                 var b2 = sum <= 17;
                 return b1;
             }).ToList();
@@ -544,9 +544,9 @@ namespace ThreeDLotto
             var nums = data.Where(g =>
             {
                 var span = Math.Abs(g[0] - g[1]);
-                var b1 = span % 3 == 1 || span % 3 == 2;
+                var b1 = span % 3 == 0 || span % 3 == 1;
                 var b2 = span <= 2 || span >= 7;
-                return b2;
+                return b1;
             }).ToList();
 
             PrintHelper.PrintForecastResult(string.Format("经百十位差值过滤后余{0}组", nums.Count()));
@@ -584,7 +584,7 @@ namespace ThreeDLotto
             var nums = data.Where(g =>
             {
                 var span = Math.Abs(g[1] - g[2]);
-                var b1 = span % 3 == 0 || span % 3 == 2;
+                var b1 = span % 3 == 0 || span % 3 == 1;
                 var b2 = span <= 2 || span >= 7;
                 return b1;
             }).ToList();
