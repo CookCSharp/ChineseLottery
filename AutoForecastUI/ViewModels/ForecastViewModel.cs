@@ -45,7 +45,7 @@ public partial class ForecastViewModel : ViewModelBase
             });
         }
 
-        int[] nums = [01, 07, 08, 18, 28, 04, 12];
+        int[] nums = [16, 18, 25, 26, 33, 04, 08 ];
         LastLotto = nums.ToD2String();
     }
 

@@ -47,10 +47,10 @@ public static class Tool
         return result;
     }
 
-    public static List<int[]> FindAllSortedCombinations(int[] first, int[] second, int[] third, int[] fourth, int[] fifth, int[] sixth)
+    public static List<int[]> FindAllSortedCombinations(int[] first, int[] second, int[] third, int[] fourth, int[] fifth, int[] sixth, bool allowSame = false)
     {
         var result = new List<int[]>();
-        GenerateCombinations(first, second, third, fourth, fifth, sixth, 0, [], result);
+        GenerateCombinations(first, second, third, fourth, fifth, sixth, 0, [], result, allowSame);
         return result;
     }
 
@@ -99,7 +99,7 @@ public static class Tool
         }
     }
 
-    private static void GenerateCombinations(int[] first, int[] second, int[] third, int[] fourth, int[] fifth, int[] sixth, int index, List<int> current, List<int[]> result)
+    private static void GenerateCombinations(int[] first, int[] second, int[] third, int[] fourth, int[] fifth, int[] sixth, int index, List<int> current, List<int[]> result, bool allowSame = false)
     {
         if (index == 6)
         {
@@ -114,10 +114,10 @@ public static class Tool
         // 递归处理每一个集合的每个元素
         foreach (var value in list)
         {
-            if (current.Count == 0 || value > current[^1])
+            if (allowSame || current.Count == 0 || value > current[^1])
             {
                 current.Add(value);
-                GenerateCombinations(first, second, third, fourth, fifth, sixth, index + 1, current, result);
+                GenerateCombinations(first, second, third, fourth, fifth, sixth, index + 1, current, result, allowSame);
                 current.RemoveAt(current.Count - 1);
             }
         }
@@ -169,7 +169,7 @@ public static class Tool
             return "大";
         return "中";
     }
-    
+
     private static int[] FilterByMantissaValue(this int[] values, int[] mantissaValues)
         => values.Where(n => mantissaValues.Contains(n % 10)).ToArray();
 

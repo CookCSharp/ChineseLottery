@@ -24,7 +24,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        Views = ["Search", "Forecast", "LastPeriodResult"];
+        Views = ["Search", "Forecast", "Result", "LastPeriodResult"];
     }
 
     public void OnLoaded()

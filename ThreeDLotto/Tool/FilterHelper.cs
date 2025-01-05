@@ -422,8 +422,9 @@ namespace ThreeDLotto
             var nums = data.Where(g =>
             {
                 var sum = g.Sum();
-                var b1 = sum % 3 == 1 || sum % 3 == 1;
-                var b2 = sum <= 17;
+                var b1 = sum % 3 == 0 || sum % 3 == 2;
+                var b2 = sum >= 9;  // && sum <= 17
+                var b3 = sum == 12 || sum == 15 || sum == 22;
                 return b1;
             }).ToList();
 

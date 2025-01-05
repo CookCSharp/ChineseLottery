@@ -13,7 +13,7 @@ public static class FindExtensions
     private const int RegularLength = 15; //规律数组长度
     // private const int MinPeriodCount = 3; //找到满足条件的最小周期数量
 
-    private static int MinPeriodCount = 3; //找到满足条件的最小周期数量 
+    private static int MinPeriodCount = 4; //找到满足条件的最小周期数量 
 
     public static void SetMinPeriodCount(int period) => MinPeriodCount = period;
 

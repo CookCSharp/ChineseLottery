@@ -38,7 +38,7 @@ public abstract class ForecastBase
         HistoryValidation();
     }
 
-    public async Task<Dictionary<string, IList<int>>> GetHistoryData(LottoType lottoType = LottoType.Supper)
+    public async Task<Dictionary<string, IList<int>>> GetHistoryDataAsync(LottoType lottoType = LottoType.Supper)
     {
         var historyData = new Dictionary<string, IList<int>>();
         await using var fs = new FileStream(AppDomain.CurrentDomain.BaseDirectory + $"Assets\\history_{lottoType.ToString().ToLower()}.json", FileMode.Open);
@@ -47,12 +47,23 @@ public abstract class ForecastBase
         var dataList = JsonNode.Parse(resultJson)!.AsArray();
         foreach (var t in dataList)
         {
-            var key = t!["lotteryDrawNum"]!.ToString();
-            var value = t["lotteryDrawResult"]!.ToString().Split(' ').Select(int.Parse).ToList();
+            var keyValueStr = GetKeyValueString(lottoType);
+            var key = t![keyValueStr.Item1]!.ToString();
+            var value = t[keyValueStr.Item2]!.ToString().Split(' ', ',').Select(int.Parse).ToList();
             historyData.Add(key, value);
+
+            // var key = t!["lotteryDrawNum"]!.ToString();
+            // var value = t["lotteryDrawResult"]!.ToString().Split(' ').Select(int.Parse).ToList();
+            // historyData.Add(key, value);
         }
 
         return new Dictionary<string, IList<int>>(historyData.Reverse());
+    }
+
+    public async Task<int[]> GetLatestLottoAsync(LottoType lottoType = LottoType.Supper)
+    {
+        var historyData = await GetHistoryDataAsync(lottoType);
+        return historyData.LastOrDefault().Value.ToArray();
     }
 
     protected int[] UpdateHistoryData()
@@ -244,12 +255,34 @@ public abstract class ForecastBase
         var dataList = JsonNode.Parse(resultJson)!.AsArray();
         foreach (var t in dataList)
         {
-            var key = t!["lotteryDrawNum"]!.ToString();
-            var value = t["lotteryDrawResult"]!.ToString().Split(' ').Select(int.Parse).ToList();
+            // var key_value_str = lottoType switch
+            // {
+            //     LottoType.Supper => ("lotteryDrawNum", "lotteryDrawResult"),
+            //     LottoType.Union => ("code", "red"),
+            //     LottoType.ThreeD => ("code", "red"),
+            //     LottoType.ThreePermutation => ("lotteryDrawNum", "lotteryDrawResult"),
+            //     _ => throw new ArgumentOutOfRangeException(nameof(lottoType), lottoType, null)
+            // };
+            // var key = t!["lotteryDrawNum"]!.ToString();
+            // var value = t["lotteryDrawResult"]!.ToString().Split(' ').Select(int.Parse).ToList();
+
+            var keyValueStr = GetKeyValueString(lottoType);
+            var key = t![keyValueStr.Item1]!.ToString();
+            var value = t[keyValueStr.Item2]!.ToString().Split(' ').Select(int.Parse).ToList();
             historyData.Add(key, value);
         }
 
         _historyData = new Dictionary<string, IList<int>>(historyData.Reverse());
         SemaphoreSlimInstance.Release();
     }
+
+    private (string, string) GetKeyValueString(LottoType lottoType) => lottoType switch
+    {
+        LottoType.Supper => ("lotteryDrawNum", "lotteryDrawResult"),
+        LottoType.Union => ("code", "red"), //("code", "red", "blue")
+        LottoType.ThreeD => ("code", "red"),
+        LottoType.ThreePermutation => ("lotteryDrawNum", "lotteryDrawResult"),
+        LottoType.SevenPermutation => ("lotteryDrawNum", "lotteryDrawResult"),
+        _ => throw new ArgumentOutOfRangeException(nameof(lottoType), lottoType, null)
+    };
 }

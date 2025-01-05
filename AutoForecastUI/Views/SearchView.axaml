@@ -23,19 +23,35 @@
 
     <Grid Margin="10" ColumnDefinitions="*, 260" RowDefinitions="Auto,Auto,Auto,*">
         <StackPanel Orientation="Horizontal">
-            <HeaderedContentControl Header="规律数组长度">
+            <HeaderedContentControl Header="规律最大数组长度">
                 <HeaderedContentControl.Content>
-                    <NumericUpDown Value="15" Minimum="1" Maximum="15" />
+                    <NumericUpDown Width="120"
+                                   Value="15"
+                                   Minimum="1" Maximum="15" />
                 </HeaderedContentControl.Content>
             </HeaderedContentControl>
             <HeaderedContentControl Header="最小周期数">
                 <HeaderedContentControl.Content>
-                    <NumericUpDown Value="{Binding MinPeriodCount}" Minimum="1" Maximum="10" />
+                    <NumericUpDown Width="120"
+                                   Value="{Binding MinPeriodCount}"
+                                   Minimum="1" Maximum="15">
+                        <i:Interaction.Behaviors>
+                            <b:EventTriggerBehavior EventName="ValueChanged">
+                                <b:InvokeCommandAction Command="{Binding MinPeriodCountValueChangedCommand}" PassEventArgsToCommand="True" />
+                                <!-- <b:CallMethodAction MethodName="MinPeriodCountValueChanged" TargetObject="{Binding}" /> -->
+                            </b:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </NumericUpDown>
                 </HeaderedContentControl.Content>
             </HeaderedContentControl>
             <StackPanel Margin="20,18,0,0" Orientation="Horizontal">
-                <Button Content="Sure" Command="{Binding SureCommand}" />
-                <Button Content="Query" Command="{Binding QueryCommand}" Margin="20,0" />
+                <Button Content="Sure" Command="{Binding SureCommand}" IsVisible="False" />
+                <Button Content="Query" Command="{Binding QueryCommand}" />
+                <CheckBox Content="PreviousPeriodForecast" IsChecked="{Binding IsPreviousPeriodForecast}" Margin="20,0" />
+                <ComboBox Width="180"
+                          VerticalContentAlignment="Bottom"
+                          ItemsSource="{Binding LottoTypes}"
+                          SelectedItem="{Binding SelectedLottoType}" />
                 <Button Content="Cancel" Command="{Binding QueryCancelCommand}" IsVisible="False" />
                 <Button Content="UpdateHistoryData" Command="{Binding UpdateCommand}" IsVisible="False" />
             </StackPanel>
@@ -78,10 +94,11 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <TextBlock Grid.Row="0" Grid.Column="1"
-                   Grid.RowSpan="4"
-                   Text="{Binding Result}"
-                   Margin="0,20,0,0"
-                   TextWrapping="WrapWithOverflow" />
+        <ScrollViewer Grid.Row="0" Grid.Column="1"
+                      Grid.RowSpan="4"
+                      Margin="0,20,0,0"
+                      AllowAutoHide="False" VerticalScrollBarVisibility="Auto">
+            <TextBlock Text="{Binding Result}" TextWrapping="WrapWithOverflow" />
+        </ScrollViewer>
     </Grid>
 </UserControl>

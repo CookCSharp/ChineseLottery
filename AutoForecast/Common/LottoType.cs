@@ -12,5 +12,6 @@ public enum LottoType
     Supper,
     Union,
     ThreeD,
-    ThreePermutation
+    ThreePermutation,
+    SevenPermutation
 }

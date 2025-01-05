@@ -51,7 +51,7 @@ public static class SupperTool
 
     #endregion
 
-    #region Sum
+    #region Sum012Path
 
     public static List<int[]> Sum12PathFilter(this List<int[]> data, int[] path012)
     {
@@ -102,6 +102,11 @@ public static class SupperTool
     {
         return data.Where(g => path012.Contains((g[3] + g[4]) % 3)).ToList();
     }
+    
+    public static List<int[]> Sum46PathFilter(this List<int[]> data, int[] path012)
+    {
+        return data.Where(g => path012.Contains((g[3] + g[5]) % 3)).ToList();
+    }
 
     #endregion
 
@@ -126,6 +131,11 @@ public static class SupperTool
     {
         return data.Where(g => mantissaValues.Contains((g[0] + g[4]) % 10)).ToList();
     }
+    
+    public static List<int[]> Sum16MantissaFilter(this List<int[]> data, int[] mantissaValues)
+    {
+        return data.Where(g => mantissaValues.Contains((g[0] + g[5]) % 10)).ToList();
+    }
 
     public static List<int[]> Sum23MantissaFilter(this List<int[]> data, int[] mantissaValues)
     {
@@ -141,6 +151,11 @@ public static class SupperTool
     {
         return data.Where(g => mantissaValues.Contains((g[1] + g[4]) % 10)).ToList();
     }
+    
+    public static List<int[]> Sum26MantissaFilter(this List<int[]> data, int[] mantissaValues)
+    {
+        return data.Where(g => mantissaValues.Contains((g[1] + g[5]) % 10)).ToList();
+    }
 
     public static List<int[]> Sum34MantissaFilter(this List<int[]> data, int[] mantissaValues)
     {
@@ -151,10 +166,75 @@ public static class SupperTool
     {
         return data.Where(g => mantissaValues.Contains((g[2] + g[4]) % 10)).ToList();
     }
+    
+    public static List<int[]> Sum36MantissaFilter(this List<int[]> data, int[] mantissaValues)
+    {
+        return data.Where(g => mantissaValues.Contains((g[2] + g[5]) % 10)).ToList();
+    }
 
     public static List<int[]> Sum45MantissaFilter(this List<int[]> data, int[] mantissaValues)
     {
         return data.Where(g => mantissaValues.Contains((g[3] + g[4]) % 10)).ToList();
+    }
+    
+    public static List<int[]> Sum46MantissaFilter(this List<int[]> data, int[] mantissaValues)
+    {
+        return data.Where(g => mantissaValues.Contains((g[3] + g[5]) % 10)).ToList();
+    }
+    
+    public static List<int[]> Sum56MantissaFilter(this List<int[]> data, int[] mantissaValues)
+    {
+        return data.Where(g => mantissaValues.Contains((g[4] + g[5]) % 10)).ToList();
+    }
+
+    #endregion
+
+    #region Sum
+
+    public enum ConditionType
+    {
+        LessThan,
+        MoreThan,
+    }
+
+    public static List<int[]> Sum12Filter(this List<int[]> data, ConditionType condition, int value)
+    {
+        return data.Where(g => condition == ConditionType.LessThan ? g[0] + g[1] <= value : g[0] + g[1] >= value).ToList();
+    }
+    
+    public static List<int[]> Sum14Filter(this List<int[]> data, ConditionType condition, int value)
+    {
+        return data.Where(g => condition == ConditionType.LessThan ? g[0] + g[3] <= value : g[0] + g[3] >= value).ToList();
+    }
+    
+    public static List<int[]> Sum23Filter(this List<int[]> data, ConditionType condition, int value)
+    {
+        return data.Where(g => condition == ConditionType.LessThan ? g[1] + g[2] <= value : g[1] + g[2] >= value).ToList();
+    }
+
+    public static List<int[]> Sum25Filter(this List<int[]> data, ConditionType condition, int value)
+    {
+        return data.Where(g => condition == ConditionType.LessThan ? g[1] + g[4] <= value : g[1] + g[4] >= value).ToList();
+    }
+    
+    public static List<int[]> Sum26Filter(this List<int[]> data, ConditionType condition, int value)
+    {
+        return data.Where(g => condition == ConditionType.LessThan ? g[1] + g[5] <= value : g[1] + g[5] >= value).ToList();
+    }
+
+    public static List<int[]> Sum34Filter(this List<int[]> data, ConditionType condition, int value)
+    {
+        return data.Where(g => condition == ConditionType.LessThan ? g[2] + g[3] <= value : g[2] + g[3] >= value).ToList();
+    }
+    
+    public static List<int[]> Sum35Filter(this List<int[]> data, ConditionType condition, int value)
+    {
+        return data.Where(g => condition == ConditionType.LessThan ? g[2] + g[4] <= value : g[2] + g[4] >= value).ToList();
+    }
+    
+    public static List<int[]> Sum45Filter(this List<int[]> data, ConditionType condition, int value)
+    {
+        return data.Where(g => condition == ConditionType.LessThan ? g[3] + g[4] <= value : g[3] + g[4] >= value).ToList();
     }
 
     #endregion

@@ -15,8 +15,9 @@ public partial class App : Application
     {
         var services = new ServiceCollection();
         services.AddScoped<SearchView>();
-        services.AddScoped<LastPeriodResultView>();
         services.AddScoped<ForecastView>();
+        services.AddScoped<ResultView>();
+        services.AddScoped<LastPeriodResultView>();
         
         Ioc.Default.ConfigureServices(services.BuildServiceProvider());
     }

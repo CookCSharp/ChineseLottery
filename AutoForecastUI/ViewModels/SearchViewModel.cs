@@ -10,10 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Text;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoForecast;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -25,14 +26,21 @@ public partial class SearchViewModel : ViewModelBase
     private readonly string[] Singles = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh"];
     private readonly string[] Combinations = ["12", "13", "14", "15", "23", "24", "25", "34", "35", "45"];
 
-    [ObservableProperty] private int _minPeriodCount = 3;
-    
+    [ObservableProperty] private int _minPeriodCount = 4;
+
+    [ObservableProperty] private bool _isPreviousPeriodForecast;
+
+    [ObservableProperty] private LottoType _selectedLottoType;
+
+    [ObservableProperty] private ObservableCollection<LottoType> _lottoTypes = new(Enum.GetValues<LottoType>());
+
     [ObservableProperty] private ObservableCollection<HistoryFeature> _singleFeatures;
 
     [ObservableProperty] private ObservableCollection<HistoryFeature> _sumFeatures;
 
     [ObservableProperty] private string? _result;
 
+    private Dictionary<string, IList<int>> _historyDataCache = new();
     private Dictionary<string, IList<int>> _historyData = new();
     private HistoryFeature _feature = new();
 
@@ -47,16 +55,55 @@ public partial class SearchViewModel : ViewModelBase
         WeakReferenceMessenger.Default.Register<string>(this, (o, m) => { Result = m; });
         WeakReferenceMessenger.Default.Register<HistoryFeature>(this, (o, f) => { _feature = f; });
     }
-    
+
     public async void OnLoaded()
     {
         await UpdateAsync(new CancellationToken());
+        OnIsPreviousPeriodForecastChanged(IsPreviousPeriodForecast);
+    }
+
+    [RelayCommand]
+    public void MinPeriodCountValueChanged(NumericUpDownValueChangedEventArgs e)
+    {
+        if (e.NewValue != null)
+            FindExtensions.SetMinPeriodCount((int)e.NewValue!);
     }
 
     [RelayCommand]
     private void Sure()
     {
         FindExtensions.SetMinPeriodCount(MinPeriodCount);
+    }
+
+    partial void OnIsPreviousPeriodForecastChanged(bool value)
+    {
+        _historyData = value ? new Dictionary<string, IList<int>>(_historyDataCache.Take(_historyDataCache.Count - 1)) : _historyDataCache;
+    }
+
+    async partial void OnSelectedLottoTypeChanged(LottoType value)
+    {
+        switch (value)
+        {
+            case LottoType.Supper:
+                _historyDataCache = await SupperForecast.Instance.GetHistoryDataAsync();
+                break;
+            case LottoType.Union:
+                _historyDataCache = await SupperForecast.Instance.GetHistoryDataAsync(LottoType.Union);
+                break;
+            case LottoType.SevenPermutation:
+                _historyDataCache = await SupperForecast.Instance.GetHistoryDataAsync(LottoType.SevenPermutation);
+                break;
+            case LottoType.ThreeD:
+                _historyDataCache = await SupperForecast.Instance.GetHistoryDataAsync(LottoType.ThreeD);
+                break;
+            case LottoType.ThreePermutation:
+                _historyDataCache = await SupperForecast.Instance.GetHistoryDataAsync(LottoType.ThreePermutation);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        OnIsPreviousPeriodForecastChanged(IsPreviousPeriodForecast);
     }
 
     [RelayCommand(IncludeCancelCommand = true)]
@@ -69,7 +116,7 @@ public partial class SearchViewModel : ViewModelBase
         try
         {
             await GetPrint(_feature.Name, linkedTokenSource.Token).ConfigureAwait(false);
-            
+
             //await Task.Delay(10000, linkedTokenSource.Token).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (cts.IsCancellationRequested)
@@ -81,15 +128,14 @@ public partial class SearchViewModel : ViewModelBase
         }
         catch (Exception)
         {
-            //ignore
+            //
         }
     }
 
     [RelayCommand(IncludeCancelCommand = true)]
     private async Task UpdateAsync(CancellationToken token)
     {
-        //由于当前只有一项，故只需要在此获取即可
-        _historyData = await SupperForecast.Instance.GetHistoryData();
+        _historyDataCache = await SupperForecast.Instance.GetHistoryDataAsync();
     }
 
     private async Task GetPrint(string name, CancellationToken token)
@@ -133,6 +179,9 @@ public partial class SearchViewModel : ViewModelBase
                 _historyData.FindSumValue012Path(first, second);
                 _historyData.FindSumValueMantissa012Path(first, second);
                 _historyData.FindSumValueMantissaLargeMediumSmall(first, second);
+
+                _historyData.FindSpanValueMantissa012Path(first, second);
+                _historyData.FindSpanValueMantissaLargeMediumSmall(first, second);
                 break;
         }
 
